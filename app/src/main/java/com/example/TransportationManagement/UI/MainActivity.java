@@ -1,36 +1,21 @@
 package com.example.TransportationManagement.UI;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.TransportationManagement.Entities.Travel;
-import com.example.TransportationManagement.Model.RegisteredItem;
 import com.example.TransportationManagement.R;
-import com.example.TransportationManagement.UI.ui.home.HomeFragment;
-import com.example.TransportationManagement.UI.ui.slideshow.SlideshowFragment;
-import com.example.TransportationManagement.adapter.RegisteredAdapter;
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.Arrays;
-import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,5 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
 
     }
+
 
 }

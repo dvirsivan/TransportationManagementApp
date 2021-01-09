@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_weight="1">
+
+    <TextView
+        android:id="@+id/sourceInCompany"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Source"
+        android:layout_margin="10dp"
+        android:layout_weight="1"/>
+
+    <Spinner
+        android:id="@+id/destinationsInCompany"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"/>
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+    <TextView
+        android:id="@+id/num_of_passengers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Num of passengers"
+        android:layout_margin="10dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/client_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Client name"
+        android:layout_margin="10dp"
+        android:layout_weight="1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+    <Button
+
+        android:id="@+id/callButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Call"
+        android:layout_margin="10dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/start_date"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="start date"
+        android:layout_margin="10dp"
+        android:layout_weight="1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+    <TextView
+        android:id="@+id/sum_days"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="sum days"
+        android:layout_margin="10dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/accept_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="accept"
+        android:layout_margin="10dp"
+        android:layout_weight="1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+    <CheckBox
+        android:enabled="false"
+        android:id="@+id/acceptedCheckBox"
+        android:layout_width="32dp"
+        android:layout_height="33dp"
+        android:layout_marginRight="100px"
+        android:layout_marginLeft="100px"
+        android:layout_marginTop="350dp"
+        />
+    </LinearLayout>
+</LinearLayout>
