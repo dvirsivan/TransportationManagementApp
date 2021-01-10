@@ -1,22 +1,31 @@
 package com.example.TransportationManagement.Model;
 
 import com.example.TransportationManagement.Entities.Travel;
+import com.example.TransportationManagement.Entities.UserLocation;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class RegisteredItem {
     private String source;
-    private List <String> destinations;
+    private LinkedList<String> destinations = new LinkedList<>();
     private String date;
     private Enum<Travel.RequestType> status;
-    private List<String> company;
+    private LinkedList<String> company = new LinkedList<>();
 
-    public RegisteredItem(String source, List<String> destinations, String date, Enum<Travel.RequestType> status, List<String> company) {
-        this.source = source;
-        this.destinations = destinations;
+    public RegisteredItem(UserLocation source, List<UserLocation> destinations, String date, Enum<Travel.RequestType> status, HashMap<String, Boolean> company) {
+        this.source = source.toString();
         this.date = date;
         this.status = status;
-        this.company = company;
+        for(Map.Entry<String,Boolean> entry:company.entrySet()){
+            this.company.add(entry.getKey());
+        }
+
+        for (UserLocation userLocation : destinations){
+            this.destinations.add(userLocation.toString());
+        }
     }
 
     public String getSource() {

@@ -1,5 +1,7 @@
 package com.example.TransportationManagement.Model;
 
+import com.example.TransportationManagement.Entities.UserLocation;
+
 import java.util.LinkedList;
 
 public class CompanyItem {
@@ -11,14 +13,21 @@ public class CompanyItem {
     private LinkedList<String> destinations = new LinkedList<>();
     private Boolean accepted;
 
-    public CompanyItem(String source, String numPas, String cName, String startDate, String sumDays, LinkedList<String> destinations,Boolean accepted) {
-        this.source = source;
+
+
+    private String phone;
+
+    public CompanyItem(UserLocation source, String numPas, String cName, String startDate, String sumDays, String phone, LinkedList<UserLocation> destinations, Boolean accepted) {
+        this.source = source.toString();
         this.numPas = numPas;
         this.cName = cName;
         this.startDate = startDate;
         this.sumDays = sumDays;
-        this.destinations = destinations;
+        this.phone=phone;
         this.accepted = accepted;
+        for (UserLocation userLocation : destinations){
+            this.destinations.add(userLocation.toString());
+        }
     }
 
     public String getSource() {
@@ -60,6 +69,8 @@ public class CompanyItem {
     public void setSumDays(String sumDays) {
         this.sumDays = sumDays;
     }
+
+    public String getPhone() { return phone; }
 
     public LinkedList<String> getDestinations() {
         return destinations;
