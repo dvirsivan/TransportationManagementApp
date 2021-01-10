@@ -11,6 +11,7 @@ import com.example.TransportationManagement.Model.HistoryDataSource;
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.Model.TravelFirebaseDataSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TravelRepository implements ITravelRepository {
@@ -18,6 +19,11 @@ public class TravelRepository implements ITravelRepository {
     private IHistoryDataSource historyDataSource;
     private ITravelRepository.NotifyToTravelListListener notifyToTravelListListenerRepository;
     List<Travel> travelList;
+
+
+
+
+
 
 
 
@@ -72,4 +78,5 @@ public class TravelRepository implements ITravelRepository {
     public void setNotifyToTravelListListener(ITravelRepository.NotifyToTravelListListener l) {
         notifyToTravelListListenerRepository = l;
     }
+
 }

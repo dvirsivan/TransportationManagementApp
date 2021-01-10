@@ -101,6 +101,7 @@ public class Travel {
         this.startDate = converter.dateToTimestamp(startDate);
     }
 
+
     public void setEndDate(Date endDate) {DateConverter converter = new DateConverter();
         this.endDate = converter.dateToTimestamp(endDate);
     }

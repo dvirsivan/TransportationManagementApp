@@ -12,55 +12,70 @@ import com.example.TransportationManagement.Model.RegisteredItem;
 import com.example.TransportationManagement.Repository.ITravelRepository;
 import com.example.TransportationManagement.Repository.TravelRepository;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
     ITravelRepository repository;
-    private MutableLiveData<List<Travel>> mutableLiveData=new MutableLiveData<>();
+    MutableLiveData<List<Travel>> mutableTravels = new MutableLiveData<>();
+    MutableLiveData<List<Travel>> mutableCompany = new MutableLiveData<>();
+    MutableLiveData<List<Travel>> mutableRegistered = new MutableLiveData<>();
+
+    public MutableLiveData<List<Travel>> getMutableLiveData() {
+        return mutableTravels;
+    }
 
 
-
-    private MutableLiveData<List<CompanyItem>> mutableCompanyItemLiveData=new MutableLiveData<>();
-    private MutableLiveData<List<RegisteredItem>> mutableRegisteredItemLiveData=new MutableLiveData<>();
-    public MainViewModel(Application p){
+    public MainViewModel(Application p){//צריך לבדוק אם הרשימות נטענות
         super(p);
         repository = TravelRepository.getInstance(p);
         ITravelRepository.NotifyToTravelListListener notifyToTravelListListener=new ITravelRepository.NotifyToTravelListListener() {
             @Override
             public void onTravelsChanged() {
                 List<Travel> travelList = repository.getAllTravels();
-                mutableLiveData.setValue(travelList);
-                updateCompanyItem(travelList);
-
+                mutableTravels.setValue(travelList);
+                updateCompany(travelList);
+                updateRegistered(travelList);
             }
         };
+        repository.setNotifyToTravelListListener(notifyToTravelListListener);
 
 
     }
-    private void updateCompanyItem(List<Travel> travelList){
-        LinkedList<CompanyItem> companyItemList = new LinkedList<>();
 
+
+
+    private void updateCompany(List<Travel> travelList){
+        ArrayList<Travel> companyTravels = new ArrayList<>();
         for (Travel travel:travelList){
-            companyItemList.add(new CompanyItem(travel.getSource(),travel.getAmountTravelers(),travel.getClientName(),travel.getStartDate(),
-                    "3",travel.getClientPhone(),travel.getDestinations(),travel.getStatus()==Travel.RequestType.accepted));
+            if(Travel.RequestType.getTypeInt(travel.getStatus())<2){
+                companyTravels.add(travel);
+            }
         }
-        mutableCompanyItemLiveData.setValue(companyItemList);
-    }
-    private void updateRegisteredItem(List<Travel> travelList){
-        LinkedList<RegisteredItem> registeredItemList = new LinkedList<>();
-        for (Travel travel:travelList){
-            registeredItemList.add(new RegisteredItem(travel.getSource(),travel.getDestinations(),travel.getStartDate(),travel.getStatus(),travel.getCompany()));
-        }
-        mutableRegisteredItemLiveData.setValue(registeredItemList);
+        mutableCompany.setValue(companyTravels);
     }
 
-    public MutableLiveData<List<CompanyItem>> getAllCompanyItem() {
-        return mutableCompanyItemLiveData;
+    private void updateRegistered(List<Travel> travelList){
+        ArrayList<Travel> registeredTravel = new ArrayList<>();
+        for(Travel travel:travelList){
+            if(Travel.RequestType.getTypeInt(travel.getStatus())<1){
+                registeredTravel.add(travel);
+            }
+        }
+        mutableRegistered.setValue(registeredTravel);
     }
 
-    public MutableLiveData<List<RegisteredItem>> getAllRegisteredItem() {
-        return mutableRegisteredItemLiveData;
+    public MutableLiveData<List<Travel>> getMutableTravels() {
+        return mutableTravels;
+    }
+
+    public MutableLiveData<List<Travel>> getMutableCompany() {
+        return mutableCompany;
+    }
+
+    public MutableLiveData<List<Travel>> getMutableRegistered() {
+        return mutableRegistered;
     }
 
 }

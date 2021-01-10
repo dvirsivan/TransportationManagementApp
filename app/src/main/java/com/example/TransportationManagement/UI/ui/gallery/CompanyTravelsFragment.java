@@ -32,15 +32,16 @@ public class CompanyTravelsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_company_travels, container, false);
         final RecyclerView recyclerView = root.findViewById(R.id.companyRecyclerView);
         //CompanyAdapter companyAdapter = new CompanyAdapter();
-        mainViewModel = new ViewModelProvider(getActivity()).get(mainViewModel.getClass());
-        mainViewModel.getAllCompanyItem().observe(this.getActivity(), new Observer<List<CompanyItem>>() {
-            @Override
-            public void onChanged(List<CompanyItem> companyItems) {
-                ArrayList<CompanyItem> companyItemList = new ArrayList<>(companyItems);
-                CompanyAdapter companyAdapter = new CompanyAdapter(companyItemList);
 
+        mainViewModel.getMutableCompany().observe(this.getActivity(), new Observer<List<Travel>>() {
+            @Override
+            public void onChanged(List<Travel> travelList) {
+                ArrayList<Travel> travels = new ArrayList<>(travelList);
+                CompanyAdapter companyAdapter = new CompanyAdapter(travels,getContext());
+                recyclerView.setAdapter(companyAdapter);
             }
         });
+
 
         return root;
     }

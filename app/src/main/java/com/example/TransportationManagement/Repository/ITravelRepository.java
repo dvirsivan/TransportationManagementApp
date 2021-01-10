@@ -16,5 +16,6 @@ public interface ITravelRepository {
     interface NotifyToTravelListListener {
         void onTravelsChanged();
     }
+
     void setNotifyToTravelListListener(ITravelRepository.NotifyToTravelListListener l);
 }

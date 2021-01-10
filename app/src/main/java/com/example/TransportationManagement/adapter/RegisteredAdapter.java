@@ -21,9 +21,9 @@ import java.util.List;
 
 public class RegisteredAdapter extends BaseAdapter {
     private Context context;
-    private List<RegisteredItem> items;
+    private List<Travel> items;
 
-    public RegisteredAdapter(Context context, List<RegisteredItem> items) {
+    public RegisteredAdapter(Context context, List<Travel> items) {
         this.context = context;
         this.items = items;
     }
