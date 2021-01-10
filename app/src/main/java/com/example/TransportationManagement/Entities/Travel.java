@@ -18,7 +18,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -100,7 +102,23 @@ public class Travel {
     }
 
     public void setEndDate(Date endDate) {DateConverter converter = new DateConverter();
-        this.endDate = converter.dateToTimestamp(endDate);}
+        this.endDate = converter.dateToTimestamp(endDate);
+    }
+
+    public long  getSumDays(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+        try {
+            Date firstDate = sdf.parse(startDate);
+            Date secondDate = sdf.parse(endDate);
+            long diffInMillies = Math.abs(firstDate.getTime() - secondDate.getTime());
+            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+            return diff;
+        } catch (ParseException e) {
+            e.printStackTrace();
+
+        }
+        return -1;
+    }
 
     public static class LinkListConverter {
         @TypeConverter

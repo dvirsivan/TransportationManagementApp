@@ -1,5 +1,6 @@
 package com.example.TransportationManagement.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.TransportationManagement.Entities.Travel;
+import com.example.TransportationManagement.Entities.UserLocation;
 import com.example.TransportationManagement.Model.CompanyItem;
 import com.example.TransportationManagement.R;
+import com.example.TransportationManagement.UI.MainActivity;
+
+import java.util.ArrayList;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyHolder> {
-    private CompanyItem[] companyItems;
+    private ArrayList<Travel> companyItems;
+    private Context context;
 
-    public CompanyAdapter(CompanyItem[] companyItems) {
+    public CompanyAdapter(ArrayList<Travel> companyItems, Context context) {
+
         this.companyItems = companyItems;
+        this.context = context;
     }
 
     @NonNull
@@ -33,25 +42,26 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
 
     @Override
     public void onBindViewHolder(@NonNull CompanyHolder holder, int position) {
-        CompanyItem companyItem = companyItems[position];
-        holder.sumDays.setText(companyItem.getSumDays());
-        holder.date.setText(companyItem.getSumDays());
-        holder.cName.setText(companyItem.getSumDays());
-        holder.numPass.setText(companyItem.getSumDays());
-        holder.source.setText(companyItem.getSumDays());
+        Travel companyItem = companyItems.get(position);
+        holder.sumDays.setText((int)companyItem.getSumDays());
+        holder.date.setText(companyItem.getStartDate());
+        holder.cName.setText(companyItem.getClientName());
+        holder.numPass.setText(companyItem.getAmountTravelers());
+        holder.source.setText(companyItem.getSource().convertToString(context).get(0).getAddressLine(0));
         holder.accept.setOnClickListener(  view->
         {
             // need to implement!!
         });
         holder.call.setOnClickListener(view ->{
             // need to implement!!
+
         });
-        holder.acceptedBox.setChecked(companyItem.getAccepted());
+        holder.acceptedBox.setChecked(Travel.RequestType.getTypeInt(companyItem.getStatus()) == 1);
     }
 
     @Override
     public int getItemCount() {
-        return companyItems.length;
+        return companyItems.size();
     }
 
     public static class CompanyHolder extends RecyclerView.ViewHolder {
