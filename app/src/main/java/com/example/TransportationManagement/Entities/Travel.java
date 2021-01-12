@@ -13,6 +13,7 @@ import androidx.room.TypeConverters;
 import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,8 +37,10 @@ public class Travel {
     private String clientName;
     private String clientPhone;
     private String clientEmail;
+    @TypeConverters(RequestType.class)
     private RequestType status;
-    private LinkedList<UserLocation> destinations;
+    @TypeConverters(LinkListConverter.class)
+    private ArrayList<UserLocation> destinations;
     private UserLocation source;
     private String amountTravelers;
 
@@ -95,7 +98,7 @@ public class Travel {
     public void addDestinations(List dest){
         destinations.addAll(dest);
     }
-
+/*
     public void setStartDate(Date startDate) {
         DateConverter converter = new DateConverter();
         this.startDate = converter.dateToTimestamp(startDate);
@@ -104,7 +107,7 @@ public class Travel {
 
     public void setEndDate(Date endDate) {DateConverter converter = new DateConverter();
         this.endDate = converter.dateToTimestamp(endDate);
-    }
+    }*/
 
     public long  getSumDays(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
@@ -123,15 +126,15 @@ public class Travel {
 
     public static class LinkListConverter {
         @TypeConverter
-        public LinkedList<UserLocation> fromString(String value) {
+        public ArrayList<UserLocation> fromString(String value) {
             if (value == null || value.equals(""))
                 return null;
             String[] locations = value.split(" ");
             LinkedList<UserLocation> result = new LinkedList(Arrays.asList(locations));
-            /*for (int i = 0; i < locations.length; i += 2){
+            for (int i = 0; i < locations.length; i += 2){
                 UserLocation temp = new UserLocation(Double.parseDouble(locations[i]),Double.parseDouble(locations[i+1]));
                 result.add(temp);
-            }*/
+            }
             return result;
         }
         @RequiresApi(api = Build.VERSION_CODES.N)
@@ -169,7 +172,7 @@ public class Travel {
         this.creatingDate = creatingDate;
     }
 
-    public void setDestinations(LinkedList<UserLocation> destinations) {
+        public void setDestinations(ArrayList<UserLocation> destinations) {
         this.destinations = destinations;
     }
 
@@ -181,7 +184,7 @@ public class Travel {
         Date now = new Date();
         DateConverter converter = new DateConverter();
         creatingDate = converter.dateToTimestamp(new Date(now.getTime()));
-        destinations = new LinkedList<>();
+        destinations = new ArrayList<>();
     }
 
     public void setTravelId(@NonNull String travelId) {
