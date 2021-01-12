@@ -40,16 +40,13 @@ public class TravelRepository implements ITravelRepository {
         travelDataSource = TravelFirebaseDataSource.getInstance();
         historyDataSource = new HistoryDataSource(application.getApplicationContext());
 
-        ITravelDataSource.NotifyToTravelListListener notifyToTravelListListener = new ITravelDataSource.NotifyToTravelListListener() {
-            @Override
-            public void onTravelsChanged() {
-                travelList = travelDataSource.getAllTravels();
+        ITravelDataSource.NotifyToTravelListListener notifyToTravelListListener = () -> {
+            travelList = travelDataSource.getAllTravels();
 
 
-                if (notifyToTravelListListenerRepository != null)
-                    notifyToTravelListListenerRepository.onTravelsChanged();
+            if (notifyToTravelListListenerRepository != null)
+                notifyToTravelListListenerRepository.onTravelsChanged();
 
-            }
         };
 
         travelDataSource.setNotifyToTravelListListener(notifyToTravelListListener);
