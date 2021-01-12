@@ -1,12 +1,19 @@
 package com.example.TransportationManagement.adapter;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.TransportationManagement.Entities.Travel;
@@ -18,9 +25,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     private ArrayList<Travel> travels;
+    Context context;
 
-    public HistoryAdapter(ArrayList<Travel> travels) {
+    public HistoryAdapter(ArrayList<Travel> travels , Context context) {
+
         this.travels = travels;
+        this.context = context;
     }
 
     @NonNull
@@ -46,7 +56,16 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             // need to implement
         });
         holder.call.setOnClickListener(v -> {
-            // need to implement
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" ));//צריך להבין איך משיגים את הטלפון
+
+            if (ActivityCompat.checkSelfPermission(context,
+                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(context, "please approve phone call", Toast.LENGTH_LONG).show();
+            }
+            else
+                context.startActivity(callIntent);
+
         });
     }
 

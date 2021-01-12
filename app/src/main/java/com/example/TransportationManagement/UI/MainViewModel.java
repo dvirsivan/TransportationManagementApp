@@ -11,6 +11,8 @@ import com.example.TransportationManagement.Model.CompanyItem;
 import com.example.TransportationManagement.Model.RegisteredItem;
 import com.example.TransportationManagement.Repository.ITravelRepository;
 import com.example.TransportationManagement.Repository.TravelRepository;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -21,6 +23,8 @@ public class MainViewModel extends AndroidViewModel {
     MutableLiveData<List<Travel>> mutableTravels = new MutableLiveData<>();
     MutableLiveData<List<Travel>> mutableCompany = new MutableLiveData<>();
     MutableLiveData<List<Travel>> mutableRegistered = new MutableLiveData<>();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser;
 
     public MutableLiveData<List<Travel>> getMutableLiveData() {
         return mutableTravels;
@@ -30,6 +34,7 @@ public class MainViewModel extends AndroidViewModel {
     public MainViewModel(Application p){//צריך לבדוק אם הרשימות נטענות
         super(p);
         repository = TravelRepository.getInstance(p);
+        currentUser = mAuth.getCurrentUser();
         ITravelRepository.NotifyToTravelListListener notifyToTravelListListener=new ITravelRepository.NotifyToTravelListListener() {
             @Override
             public void onTravelsChanged() {
@@ -59,11 +64,14 @@ public class MainViewModel extends AndroidViewModel {
     private void updateRegistered(List<Travel> travelList){
         ArrayList<Travel> registeredTravel = new ArrayList<>();
         for(Travel travel:travelList){
-            if(Travel.RequestType.getTypeInt(travel.getStatus())<1){
+            if(Travel.RequestType.getTypeInt(travel.getStatus())<1&& travel.getClientEmail().equals(currentUser.getEmail())){
                 registeredTravel.add(travel);
             }
         }
         mutableRegistered.setValue(registeredTravel);
+    }
+    public void updateTravel(Travel toUpdate){
+        repository.updateTravel(toUpdate);
     }
 
     public MutableLiveData<List<Travel>> getMutableTravels() {

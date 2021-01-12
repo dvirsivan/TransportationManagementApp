@@ -133,7 +133,7 @@ public class Travel {
             if (value == null || value.equals(""))
                 return null;
             String[] locations = value.split(" ");
-            LinkedList<UserLocation> result = new LinkedList(Arrays.asList(locations));
+            ArrayList<UserLocation> result = new ArrayList<>();
             for (int i = 0; i < locations.length; i += 2){
                 UserLocation temp = new UserLocation(Double.parseDouble(locations[i]),Double.parseDouble(locations[i+1]));
                 result.add(temp);
@@ -192,6 +192,9 @@ public class Travel {
 
     public void setCompany(HashMap<String, Boolean> company) {
         this.company = company;
+    }
+    public void setCompany(String key, Boolean confirm){
+        company.put(key,confirm);
     }
 
     public Travel() {
