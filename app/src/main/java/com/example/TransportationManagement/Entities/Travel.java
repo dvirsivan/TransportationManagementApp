@@ -169,7 +169,7 @@ public class Travel {
     //private Date arrivalDate;
 
 
-    private HashMap<String, Boolean> company;
+    private HashMap<String, Boolean> company = new HashMap<>();
 
     public void setStartDate(String startDate) {
         this.startDate = startDate;

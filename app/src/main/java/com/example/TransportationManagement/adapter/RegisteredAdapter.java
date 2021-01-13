@@ -1,6 +1,7 @@
 package com.example.TransportationManagement.adapter;
 
 import android.content.Context;
+import android.location.Address;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 
 import com.example.TransportationManagement.Entities.Travel;
+import com.example.TransportationManagement.Entities.UserLocation;
 import com.example.TransportationManagement.Model.RegisteredItem;
 import com.example.TransportationManagement.R;
 
@@ -22,6 +24,9 @@ import java.util.List;
 public class RegisteredAdapter extends BaseAdapter {
     private Context context;
     private List<Travel> items;
+    Travel.UserLocationConverter userLocationConverter = new Travel.UserLocationConverter();
+    private final Travel.ArrayListConverter arrayListConverter = new Travel.ArrayListConverter();
+    UserLocation userLocation;
 
     public RegisteredAdapter(Context context, List<Travel> items) {
         this.context = context;
@@ -57,14 +62,11 @@ public class RegisteredAdapter extends BaseAdapter {
         Travel.RequestType[] enumL;
         enumL = new Travel.RequestType[]{Travel.RequestType.sent, Travel.RequestType.accepted, Travel.RequestType.run,
                 Travel.RequestType.close};
-        RegisteredItem currentItem = (RegisteredItem) getItem(position);
-        viewHolder.source.setText(currentItem.getSource());
-        viewHolder.date.setText(currentItem.getDate());
-        spinerAdapter(viewHolder.destinations,currentItem.getDestinations());
-        spinerAdapter(viewHolder.company,currentItem.getCompany());
-        //viewHolder.destinations.setAdapter(new ArrayAdapter(this.context,R.layout.fragment_home,
-           //     currentItem.getDestinations()));
-      //  viewHolder.statuses.setAdapter(new ArrayAdapter(this.context,R.layout.fragment_home,enumL));
+        Travel currentItem = (Travel) getItem(position);
+        viewHolder.source.setText(currentItem.getSource().convertToString(context));
+        viewHolder.date.setText(currentItem.getStartDate());
+        spinerAdapter(viewHolder.destinations,UserLocation.convertToString(context,currentItem.getDestinations()));
+        spinerAdapter(viewHolder.company,List.of(currentItem.getCompany().keySet()));
         spinerAdapter(viewHolder.statuses,List.of(enumL));
         return convertView;
     }

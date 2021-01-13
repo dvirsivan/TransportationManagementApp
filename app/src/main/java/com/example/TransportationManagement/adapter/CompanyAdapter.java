@@ -61,7 +61,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
         holder.date.setText(companyItem.getStartDate());
         holder.cName.setText(companyItem.getClientName());
         holder.numPass.setText(companyItem.getAmountTravelers());
-        holder.source.setText(companyItem.getSource().convertToString(context).get(0).getAddressLine(0));
+        holder.source.setText(companyItem.getSource().convertToString(context));
         holder.accept.setOnClickListener(  view->
         {
             companyItem.setCompany(currentUser.getEmail(),true);

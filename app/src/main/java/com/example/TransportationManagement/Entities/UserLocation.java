@@ -9,6 +9,7 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,7 +45,7 @@ public class UserLocation {
         return String.format("" + getLat() + " " + getLon());
     }
 
-    public List<Address> convertToString(Context context){
+    public String convertToString(Context context){
         Geocoder geocoder;
         List<Address> addresses = null;
         geocoder = new Geocoder(context, Locale.getDefault());
@@ -53,7 +54,14 @@ public class UserLocation {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return addresses;
+        return addresses.get(0).getAddressLine(0);
+    }
+    public static List<String> convertToString(Context context, List<UserLocation> userLocationList){
+        List<String> locations = new ArrayList<>();
+        for(UserLocation location:userLocationList){
+            locations.add(location.convertToString(context));
+        }
+        return locations;
     }
 
 }

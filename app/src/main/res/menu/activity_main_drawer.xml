@@ -19,6 +19,7 @@
 
         <item
             android:id="@+id/exit"
+            android:onClick="exit"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Exit" />
     </group>
