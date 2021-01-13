@@ -64,9 +64,6 @@ public class RegisteredAdapter extends BaseAdapter {
         viewHolder.date.setText(currentItem.getDate());
         spinerAdapter(viewHolder.destinations,currentItem.getDestinations());
         spinerAdapter(viewHolder.company,currentItem.getCompany());
-        //viewHolder.destinations.setAdapter(new ArrayAdapter(this.context,R.layout.fragment_home,
-           //     currentItem.getDestinations()));
-      //  viewHolder.statuses.setAdapter(new ArrayAdapter(this.context,R.layout.fragment_home,enumL));
         spinerAdapter(viewHolder.statuses,Renum);
         viewHolder.statuses.setOnItemClickListener((parent1, view, position1, id) -> {
             items.get(position).setStatus(Travel.RequestType.getType(position1));
