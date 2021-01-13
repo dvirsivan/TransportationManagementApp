@@ -12,13 +12,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.TransportationManagement.Entities.Travel;
-import com.example.TransportationManagement.Model.CompanyItem;
 import com.example.TransportationManagement.R;
 import com.example.TransportationManagement.UI.MainViewModel;
 import com.example.TransportationManagement.adapter.CompanyAdapter;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class CompanyTravelsFragment extends Fragment {
@@ -33,13 +31,10 @@ public class CompanyTravelsFragment extends Fragment {
         final RecyclerView recyclerView = root.findViewById(R.id.companyRecyclerView);
         //CompanyAdapter companyAdapter = new CompanyAdapter();
 
-        mainViewModel.getMutableCompany().observe(this.getActivity(), new Observer<List<Travel>>() {
-            @Override
-            public void onChanged(List<Travel> travelList) {
-                ArrayList<Travel> travels = new ArrayList<>(travelList);
-                CompanyAdapter companyAdapter = new CompanyAdapter(travels,getContext());
-                recyclerView.setAdapter(companyAdapter);
-            }
+        mainViewModel.getMutableCompany().observe(this.getActivity(), travelList -> {
+            ArrayList<Travel> travels = new ArrayList<>(travelList);
+            CompanyAdapter companyAdapter = new CompanyAdapter(travels,getContext(),mainViewModel);
+            recyclerView.setAdapter(companyAdapter);
         });
 
 

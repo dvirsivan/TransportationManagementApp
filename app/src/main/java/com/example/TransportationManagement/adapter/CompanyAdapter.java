@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.Entities.UserLocation;
-import com.example.TransportationManagement.Model.CompanyItem;
+
 import com.example.TransportationManagement.R;
 import com.example.TransportationManagement.UI.MainActivity;
 import com.example.TransportationManagement.UI.MainViewModel;

@@ -1,6 +1,5 @@
 package com.example.TransportationManagement.Entities;
 
-import android.location.Location;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
@@ -11,11 +10,9 @@ import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -42,7 +39,7 @@ public class Travel {
     private String clientEmail;
     @TypeConverters(RequestType.class)
     private RequestType status;
-    @TypeConverters(LinkListConverter.class)
+    @TypeConverters(ArrayListConverter.class)
     private ArrayList<UserLocation> destinations;
     private UserLocation source;
     private String amountTravelers;
@@ -56,7 +53,7 @@ public class Travel {
 
     public String getCreatingDate() {return new String(creatingDate);}
 
-    public LinkedList<UserLocation> getDestinations() {return new LinkedList<>(destinations);}
+    public ArrayList<UserLocation> getDestinations() {return new ArrayList<>(destinations);}
 
     public UserLocation getSource() {return source;}
 
@@ -127,7 +124,7 @@ public class Travel {
         return -1;
     }
 
-    public static class LinkListConverter {
+    public static class ArrayListConverter {
         @TypeConverter
         public ArrayList<UserLocation> fromString(String value) {
             if (value == null || value.equals(""))
@@ -142,7 +139,7 @@ public class Travel {
         }
         @RequiresApi(api = Build.VERSION_CODES.N)
         @TypeConverter
-        public String asString(LinkedList<UserLocation> list) {
+        public String asString(ArrayList<UserLocation> list) {
             if (list == null)
                 return null;
             String result = list.stream().map(UserLocation::toString).collect(Collectors.joining(" "));

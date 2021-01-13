@@ -12,26 +12,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.TransportationManagement.R;
+import com.example.TransportationManagement.UI.MainViewModel;
 
-public class SlideshowFragment extends Fragment {
+public class HistoryFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private MainViewModel mainViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
+        mainViewModel =
+                new ViewModelProvider(this).get(MainViewModel.class);
         View root = inflater.inflate(R.layout.fragment_history, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        EditText email = ((EditText)root.findViewById(R.id.email));
+        final RecyclerView recyclerView = root.findViewById(R.id.historyRecyclerView);
+
         return root;
     }
 }
