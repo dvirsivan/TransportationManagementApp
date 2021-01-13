@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
@@ -15,7 +16,9 @@ import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.Model.RegisteredItem;
 import com.example.TransportationManagement.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,9 +57,8 @@ public class RegisteredAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Travel.RequestType[] enumL;
-        enumL = new Travel.RequestType[]{Travel.RequestType.sent, Travel.RequestType.accepted, Travel.RequestType.run,
-                Travel.RequestType.close};
+
+        List<String> Renum = Arrays.asList("Sent", "Accepted", "Run", "close");
         RegisteredItem currentItem = (RegisteredItem) getItem(position);
         viewHolder.source.setText(currentItem.getSource());
         viewHolder.date.setText(currentItem.getDate());
@@ -65,7 +67,10 @@ public class RegisteredAdapter extends BaseAdapter {
         //viewHolder.destinations.setAdapter(new ArrayAdapter(this.context,R.layout.fragment_home,
            //     currentItem.getDestinations()));
       //  viewHolder.statuses.setAdapter(new ArrayAdapter(this.context,R.layout.fragment_home,enumL));
-        spinerAdapter(viewHolder.statuses,List.of(enumL));
+        spinerAdapter(viewHolder.statuses,Renum);
+        viewHolder.statuses.setOnItemClickListener((parent1, view, position1, id) -> {
+            items.get(position).setStatus(Travel.RequestType.getType(position1));
+        });
         return convertView;
     }
     private void spinerAdapter(Spinner spin,List list){
