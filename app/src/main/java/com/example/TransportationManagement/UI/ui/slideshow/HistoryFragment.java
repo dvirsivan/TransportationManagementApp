@@ -24,7 +24,7 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mainViewModel =
-                new ViewModelProvider(this).get(MainViewModel.class);
+                new ViewModelProvider(getActivity()).get(MainViewModel.class);
         View root = inflater.inflate(R.layout.fragment_history, container, false);
         final RecyclerView recyclerView = root.findViewById(R.id.historyRecyclerView);
 

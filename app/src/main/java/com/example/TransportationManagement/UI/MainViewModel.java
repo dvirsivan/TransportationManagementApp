@@ -60,7 +60,8 @@ public class MainViewModel extends AndroidViewModel {
     private void updateRegistered(List<Travel> travelList){
         ArrayList<Travel> registeredTravel = new ArrayList<>();
         for(Travel travel:travelList){
-            if(Travel.RequestType.getTypeInt(travel.getStatus())<1&& travel.getClientEmail().equals(currentUser.getEmail())){
+            if(Travel.RequestType.getTypeInt(travel.getStatus())<1)//&& travel.getClientEmail().equals(currentUser.getEmail())
+            {
                 registeredTravel.add(travel);
             }
         }

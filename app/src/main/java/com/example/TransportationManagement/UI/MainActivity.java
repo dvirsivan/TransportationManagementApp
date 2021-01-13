@@ -44,19 +44,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        /*navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
-
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId()==R.id.exit)
-                {
-                    finish();
-
-                }
-                return true;
-            }
-        });*/
     }
 
     @Override
@@ -70,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        ListView registeredList = (ListView)findViewById(R.id.registeredList);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         EditText email = ((EditText)findViewById(R.id.email));
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)

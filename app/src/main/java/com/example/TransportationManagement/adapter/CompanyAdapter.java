@@ -29,15 +29,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyHolder> {
-    private ArrayList<Travel> companyItems;
+    private List<Travel> companyItems;
     private Context context;
     MainViewModel mainViewModel;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser;
 
-    public CompanyAdapter(ArrayList<Travel> companyItems, Context context, MainViewModel mainViewModel) {
+    public CompanyAdapter(List<Travel> companyItems, Context context, MainViewModel mainViewModel) {
 
         this.companyItems = companyItems;
         this.context = context;
@@ -57,7 +58,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
     @Override
     public void onBindViewHolder(@NonNull CompanyHolder holder, int position) {
         Travel companyItem = companyItems.get(position);
-        holder.sumDays.setText((int)companyItem.getSumDays());
+        holder.sumDays.setText(String.valueOf(companyItem.getSumDays()));
         holder.date.setText(companyItem.getStartDate());
         holder.cName.setText(companyItem.getClientName());
         holder.numPass.setText(companyItem.getAmountTravelers());
