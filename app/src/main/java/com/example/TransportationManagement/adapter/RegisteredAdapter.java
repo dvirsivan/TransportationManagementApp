@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 
 import com.example.TransportationManagement.Entities.Travel;
+import com.example.TransportationManagement.Entities.UserLocation;
 import com.example.TransportationManagement.Model.RegisteredItem;
 import com.example.TransportationManagement.R;
 
@@ -59,15 +60,15 @@ public class RegisteredAdapter extends BaseAdapter {
 
 
         List<String> Renum = Arrays.asList("Sent", "Accepted", "Run", "close");
-        RegisteredItem currentItem = (RegisteredItem) getItem(position);
-        viewHolder.source.setText(currentItem.getSource());
-        viewHolder.date.setText(currentItem.getDate());
-        spinerAdapter(viewHolder.destinations,currentItem.getDestinations());
-        spinerAdapter(viewHolder.company,currentItem.getCompany());
+        Travel currentItem = (Travel) getItem(position);
+        viewHolder.source.setText(currentItem.getSource().convertToString(context));
+        viewHolder.date.setText(currentItem.getStartDate());
+        spinerAdapter(viewHolder.destinations, UserLocation.convertToString(context,currentItem.getDestinations()));
+        spinerAdapter(viewHolder.company,List.of(currentItem.getCompany().keySet()));
         spinerAdapter(viewHolder.statuses,Renum);
-        viewHolder.statuses.setOnItemClickListener((parent1, view, position1, id) -> {
-            items.get(position).setStatus(Travel.RequestType.getType(position1));
-        });
+       // viewHolder.statuses.setOnItemClickListener((parent1, view, position1, id) -> {
+         //   items.get(position).setStatus(Travel.RequestType.getType(position1));
+        //});
         return convertView;
     }
     private void spinerAdapter(Spinner spin,List list){
