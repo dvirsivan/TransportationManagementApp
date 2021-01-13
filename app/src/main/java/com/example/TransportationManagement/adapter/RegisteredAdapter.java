@@ -1,10 +1,10 @@
 package com.example.TransportationManagement.adapter;
 
 import android.content.Context;
-import android.location.Address;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
@@ -13,20 +13,18 @@ import android.widget.TextView;
 
 
 import com.example.TransportationManagement.Entities.Travel;
-import com.example.TransportationManagement.Entities.UserLocation;
 import com.example.TransportationManagement.Model.RegisteredItem;
 import com.example.TransportationManagement.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class RegisteredAdapter extends BaseAdapter {
     private Context context;
     private List<Travel> items;
-    Travel.UserLocationConverter userLocationConverter = new Travel.UserLocationConverter();
-    private final Travel.ArrayListConverter arrayListConverter = new Travel.ArrayListConverter();
-    UserLocation userLocation;
 
     public RegisteredAdapter(Context context, List<Travel> items) {
         this.context = context;
@@ -59,15 +57,17 @@ public class RegisteredAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Travel.RequestType[] enumL;
-        enumL = new Travel.RequestType[]{Travel.RequestType.sent, Travel.RequestType.accepted, Travel.RequestType.run,
-                Travel.RequestType.close};
-        Travel currentItem = (Travel) getItem(position);
-        viewHolder.source.setText(currentItem.getSource().convertToString(context));
-        viewHolder.date.setText(currentItem.getStartDate());
-        spinerAdapter(viewHolder.destinations,UserLocation.convertToString(context,currentItem.getDestinations()));
-        spinerAdapter(viewHolder.company,List.of(currentItem.getCompany().keySet()));
-        spinerAdapter(viewHolder.statuses,List.of(enumL));
+
+        List<String> Renum = Arrays.asList("Sent", "Accepted", "Run", "close");
+        RegisteredItem currentItem = (RegisteredItem) getItem(position);
+        viewHolder.source.setText(currentItem.getSource());
+        viewHolder.date.setText(currentItem.getDate());
+        spinerAdapter(viewHolder.destinations,currentItem.getDestinations());
+        spinerAdapter(viewHolder.company,currentItem.getCompany());
+        spinerAdapter(viewHolder.statuses,Renum);
+        viewHolder.statuses.setOnItemClickListener((parent1, view, position1, id) -> {
+            items.get(position).setStatus(Travel.RequestType.getType(position1));
+        });
         return convertView;
     }
     private void spinerAdapter(Spinner spin,List list){
