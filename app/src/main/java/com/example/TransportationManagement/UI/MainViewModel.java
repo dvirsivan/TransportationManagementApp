@@ -83,4 +83,7 @@ public class MainViewModel extends AndroidViewModel {
         return mutableRegistered;
     }
 
+    public MutableLiveData<Boolean> getIsSuccess() {
+        return repository.getIsSuccess();
+    }
 }

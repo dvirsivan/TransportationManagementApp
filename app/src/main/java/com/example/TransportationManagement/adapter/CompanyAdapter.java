@@ -1,15 +1,20 @@
 package com.example.TransportationManagement.adapter;
 
 import android.Manifest;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,6 +30,7 @@ import com.example.TransportationManagement.Entities.UserLocation;
 import com.example.TransportationManagement.R;
 import com.example.TransportationManagement.UI.MainActivity;
 import com.example.TransportationManagement.UI.MainViewModel;
+import com.example.TransportationManagement.UI.ui.gallery.CompanyTravelsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -34,16 +40,12 @@ import java.util.List;
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyHolder> {
     private List<Travel> companyItems;
     private Context context;
-    MainViewModel mainViewModel;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseUser currentUser;
+    private CompanyTravelListener listener;
 
-    public CompanyAdapter(List<Travel> companyItems, Context context, MainViewModel mainViewModel) {
 
+    public CompanyAdapter(List<Travel> companyItems, Context context) {
         this.companyItems = companyItems;
         this.context = context;
-        this.mainViewModel = mainViewModel;
-        currentUser=mAuth.getCurrentUser();
     }
 
     @NonNull
@@ -57,31 +59,34 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
 
     @Override
     public void onBindViewHolder(@NonNull CompanyHolder holder, int position) {
+        if(position%2==0)
+            holder.linearLayout.setBackgroundColor(Color.GRAY);
+        else
+            holder.linearLayout.setBackgroundColor(Color.LTGRAY);
         Travel companyItem = companyItems.get(position);
-        holder.sumDays.setText(String.valueOf(companyItem.getSumDays()));
-        holder.date.setText(companyItem.getStartDate());
-        holder.cName.setText(companyItem.getClientName());
-        holder.numPass.setText(companyItem.getAmountTravelers());
-        holder.source.setText(companyItem.getSource().convertToString(context));
+        holder.sumDays.setText("sum of\n days:"+String.valueOf(companyItem.getSumDays()));
+        holder.date.setText("date:\n"+companyItem.getStartDate());
+        holder.cName.setText("name:\n"+companyItem.getClientName());
+        holder.numPass.setText("travelers:22");//companyItem.getAmountTravelers()
+        holder.source.setText("address:\n"+companyItem.getSource().convertToString(context));
+        spinerAdapter(holder.dest,UserLocation.convertToString(context,companyItem.getDestinations()));
         holder.accept.setOnClickListener(  view->
         {
-            companyItem.setCompany(currentUser.getEmail(),true);
-            mainViewModel.updateTravel(companyItem);
+            if(listener!=null)
+                listener.onButtonClicked(position,view);
         });
         holder.call.setOnClickListener(view ->{
-            Intent callIntent = new Intent(Intent.ACTION_CALL);
-            callIntent.setData(Uri.parse("tel:" + companyItem.getClientPhone()));
-
-            if (ActivityCompat.checkSelfPermission(context,
-                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(context, "please approve phone call", Toast.LENGTH_LONG).show();
-            }
-            else
-                context.startActivity(callIntent);
-
+            if(listener!=null)
+                listener.onButtonClicked(position,view);
         });
         holder.acceptedBox.setChecked(Travel.RequestType.getTypeInt(companyItem.getStatus()) == 1);
     }
+    private void spinerAdapter(Spinner spin,List list){
+        ArrayAdapter aa = new ArrayAdapter(this.context,android.R.layout.simple_spinner_item,list);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin.setAdapter(aa);
+    }
+
 
     @Override
     public int getItemCount() {
@@ -89,6 +94,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
     }
 
     public static class CompanyHolder extends RecyclerView.ViewHolder {
+        LinearLayout linearLayout;
         TextView source;
         TextView numPass;
         TextView cName;
@@ -101,17 +107,24 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
         public RelativeLayout relativeLayout;
         public CompanyHolder(View itemView) {
             super(itemView);
-            source = (TextView) itemView.findViewById(R.id.sourceInCompany);
-            numPass = (TextView) itemView.findViewById(R.id.num_of_passengers);
-            cName = (TextView) itemView.findViewById(R.id.client_name);
-            date = (TextView) itemView.findViewById(R.id.start_date);
-            sumDays = (TextView) itemView.findViewById(R.id.sum_days);
-            dest = (Spinner) itemView.findViewById(R.id.companySpinner);
+            linearLayout = (LinearLayout)itemView.findViewById(R.id.company_layout);
+            source = (EditText) itemView.findViewById(R.id.sourceInCompany);
+            numPass = (EditText) itemView.findViewById(R.id.num_of_passengers);
+            cName = (EditText) itemView.findViewById(R.id.client_name);
+            date = (EditText) itemView.findViewById(R.id.start_date);
+            sumDays = (EditText) itemView.findViewById(R.id.sum_days);
+            dest = (Spinner) itemView.findViewById(R.id.destinationsInCompany);
             accept = (Button) itemView.findViewById(R.id.accept_button);
             call = (Button) itemView.findViewById(R.id.callButton);
             acceptedBox = (CheckBox) itemView.findViewById(R.id.acceptedCheckBox);
 
         }
-
     }
+    public interface CompanyTravelListener {
+        void onButtonClicked(int position, View view);
+    }
+    public void setListener(CompanyTravelListener listener){
+        this.listener=listener;
+    }
+
 }
