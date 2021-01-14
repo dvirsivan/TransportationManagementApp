@@ -20,14 +20,15 @@ import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.R;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
-    private ArrayList<Travel> travels;
+    private List<Travel> travels;
     Context context;
-
-    public HistoryAdapter(ArrayList<Travel> travels , Context context) {
+    HistoryTravelListener listener;
+    public HistoryAdapter(List<Travel> travels , Context context) {
 
         this.travels = travels;
         this.context = context;
@@ -50,23 +51,25 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             if (comp.getValue())
                 company = comp.getKey();
         }
-        holder.kilometers.setText((int) travel.calcKilometers());
-        holder.name.setText(company);
-        holder.paidUp.setOnClickListener( v -> {
-            // need to implement
-        });
-        holder.call.setOnClickListener(v -> {
-            Intent callIntent = new Intent(Intent.ACTION_CALL);
-            callIntent.setData(Uri.parse("tel:" ));//צריך להבין איך משיגים את הטלפון
+        if (travel != null) {
+            holder.kilometers.setText((int) travel.calcKilometers());
+            holder.name.setText(company);
+            holder.paidUp.setOnClickListener(v -> {
+                if (listener != null)
+                    listener.onButtonClicked(position);
+            });
+            holder.call.setOnClickListener(v -> {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:"));//צריך להבין איך משיגים את הטלפון
 
-            if (ActivityCompat.checkSelfPermission(context,
-                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(context, "please approve phone call", Toast.LENGTH_LONG).show();
-            }
-            else
-                context.startActivity(callIntent);
+                if (ActivityCompat.checkSelfPermission(context,
+                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(context, "please approve phone call", Toast.LENGTH_LONG).show();
+                } else
+                    context.startActivity(callIntent);
 
-        });
+            });
+        }
     }
 
     @Override
@@ -88,4 +91,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             paidUp = (Button) itemView.findViewById(R.id.changeStatusButton);
         }
     }
+    public interface HistoryTravelListener {
+        void onButtonClicked(int position);
+    }
+    public void setListener(HistoryAdapter.HistoryTravelListener listener){
+        this.listener = listener;
+    }
+
 }

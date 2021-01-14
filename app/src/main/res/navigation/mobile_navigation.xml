@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_registered">
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_registered"
         android:name="com.example.TransportationManagement.UI.ui.home.RegisteredFragment"
-        android:label="@string/menu_home"
+        android:label="Registered"
         tools:layout="@layout/fragment_registered" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_compenies"
         android:name="com.example.TransportationManagement.UI.ui.gallery.CompanyTravelsFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_CompanyTravels" />
+        android:label="Companies"
+        tools:layout="@layout/fragment_company_travels" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_history"
         android:name="com.example.TransportationManagement.UI.ui.slideshow.HistoryFragment"
-        android:label="@string/menu_slideshow"
+        android:label="History Travels"
         tools:layout="@layout/fragment_history" />
 </navigation>

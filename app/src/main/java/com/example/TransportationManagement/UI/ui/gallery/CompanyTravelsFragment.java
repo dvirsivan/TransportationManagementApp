@@ -54,40 +54,40 @@ public class CompanyTravelsFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             CompanyAdapter adapter = new CompanyAdapter(travels, getContext());
-            recyclerView.setAdapter(companyAdapter);
+            adapter.setListener((position, view) -> action(position,view));
+            recyclerView.setAdapter(adapter);
         });
 
-        companyAdapter.setListener(new CompanyAdapter.CompanyTravelListener() {
-            @Override
-            public void onButtonClicked(int position, View view) {
-                Travel travel = travels.get(position);
-                if(view.getId()==R.id.callButton){
-                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                    String phone = travel.getClientPhone();
-                    callIntent.setData(Uri.parse("tel:" + phone));
-                    if(phone.isEmpty())
-                        Toast.makeText(getContext(), "no phone number exist", Toast.LENGTH_LONG).show();
-                    else if (ActivityCompat.checkSelfPermission(getContext(),
-                            Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ) {
-                        Toast.makeText(getContext(), "please approve phone call", Toast.LENGTH_LONG).show();
-                    }
-                    else
-                        getContext().startActivity(callIntent);
-                }
-                if(view.getId()==R.id.accept_button){
-                    travel.setCompany(keyFromMail(currentUser.getEmail()),true);//לשנות לcurrentuser.getmail
-                    mainViewModel.updateTravel(travel);
-                    mainViewModel.getIsSuccess().observe(getActivity(), new Observer<Boolean>() {
-                        @Override
-                        public void onChanged(Boolean aBoolean) {
-                            Toast.makeText(getContext(), "operation Succeeded", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
+        companyAdapter.setListener((position, view) -> action(position,view));
 
         return root;
+    }
+    private void action(int position, View view){
+        Travel travel = travels.get(position);
+        if(view.getId()==R.id.callButton){
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            String phone = travel.getClientPhone();
+            callIntent.setData(Uri.parse("tel:" + phone));
+            if(phone.isEmpty())
+                Toast.makeText(getContext(), "no phone number exist", Toast.LENGTH_LONG).show();
+            else if (ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ) {
+                Toast.makeText(getContext(), "please approve phone call", Toast.LENGTH_LONG).show();
+            }
+            else
+                getContext().startActivity(callIntent);
+        }
+        if(view.getId()==R.id.accept_button){
+            travel.setCompany(keyFromMail(currentUser.getEmail()),true);//לשנות לcurrentuser.getmail
+            mainViewModel.updateTravel(travel);
+            mainViewModel.getIsSuccess().observe(getActivity(), new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+                    Toast.makeText(getContext(), "operation Succeeded", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
     }
  private String keyFromMail(String mail){
         int i = 0;

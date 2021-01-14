@@ -11,6 +11,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:layout_margin="10dp"
             android:id="@+id/sourceText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,6 +19,7 @@
             android:text="source text" />
 
         <TextView
+            android:layout_margin="10dp"
             android:id="@+id/dateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,6 +27,7 @@
             android:text="date text"
             app:layout_constraintTop_toBottomOf="@+id/sourceText" />
         <Spinner
+            android:layout_margin="10dp"
             android:id="@+id/destinationsSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,17 +40,28 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Spinner
+            android:layout_margin="10dp"
             android:id="@+id/companySpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             />
         <Spinner
+            android:layout_margin="10dp"
             android:id="@+id/statuSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:layout_constraintTop_toBottomOf="@+id/companySpinner"
+            />
+        <Button
+            android:layout_margin="10dp"
+            android:text="Submit"
+            android:id="@+id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:layout_constraintTop_toBottomOf="@+id/statuSpinner"
             />
     </LinearLayout>
 </LinearLayout>

@@ -36,15 +36,20 @@ public class RegisteredFragment extends Fragment {
                 new ViewModelProvider(getActivity()).get(MainViewModel.class);
         View root = inflater.inflate(R.layout.fragment_registered, container, false);
         ListView listView = ((ListView) root.findViewById(R.id.registeredList));
+        RegisteredAdapter registeredAdapter = new RegisteredAdapter(getContext(), travels);
         mainViewModel.getMutableRegistered().observe(this.getActivity(), new Observer<List<Travel>>() {
             @Override
             public void onChanged(List<Travel> travelList) {
                 travels = new ArrayList<>(travelList);
-                RegisteredAdapter companyAdapter = new RegisteredAdapter(getContext(), travels);
-                listView.setAdapter(companyAdapter);
+                RegisteredAdapter registeredAdapter = new RegisteredAdapter(getContext(), travels);
+                listView.setAdapter(registeredAdapter);
             }
         });
-
+        registeredAdapter.setListener((position, status, company) -> {
+            Travel travel = travels.get(position);
+            travel.setStatus(Travel.RequestType.getType(status));
+            travel.setCompany(company,true);
+        });
 
 
         return root;
