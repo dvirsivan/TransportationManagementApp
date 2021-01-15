@@ -42,13 +42,10 @@ public class TravelRepository implements ITravelRepository {
 
         ITravelDataSource.NotifyToTravelListListener notifyToTravelListListener = () -> {
             travelList = travelDataSource.getAllTravels();
-
-
             if (notifyToTravelListListenerRepository != null)
                 notifyToTravelListListenerRepository.onTravelsChanged();
 
         };
-
         travelDataSource.setNotifyToTravelListListener(notifyToTravelListListener);
     }
 

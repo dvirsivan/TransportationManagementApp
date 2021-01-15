@@ -30,8 +30,9 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="passengers"
-            android:enabled="false"
             android:gravity="left"
+            android:enabled="false"
+            android:textColor="@color/black"
             />
     </TableRow>
 </TableLayout>
@@ -52,7 +53,8 @@
                 android:id="@+id/sourceInCompany"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
-
+                android:enabled="false"
+                android:textColor="@color/black"
                 android:text="Source" />
             <Spinner
 
@@ -76,6 +78,8 @@
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:maxWidth="100dp"
+            android:enabled="false"
+            android:textColor="@color/black"
             />
         <EditText
             android:id="@+id/start_date"
@@ -83,6 +87,8 @@
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:layout_weight="1"
+            android:enabled="false"
+            android:textColor="@color/black"
             />
         <EditText
             android:id="@+id/client_name"
@@ -90,7 +96,8 @@
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:maxWidth="100dp"
-
+            android:enabled="false"
+            android:textColor="@color/black"
             />
     </TableRow>
 </TableLayout>

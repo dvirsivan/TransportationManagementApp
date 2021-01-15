@@ -60,8 +60,6 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
     @Override
     public void onBindViewHolder(@NonNull CompanyHolder holder, int position) {
         if(position%2==0)
-            holder.linearLayout.setBackgroundColor(Color.GRAY);
-        else
             holder.linearLayout.setBackgroundColor(Color.LTGRAY);
         Travel companyItem = companyItems.get(position);
         holder.sumDays.setText("sum of\n days:"+String.valueOf(companyItem.getSumDays()));

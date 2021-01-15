@@ -38,7 +38,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listItem = layoutInflater.inflate(R.layout.company_item, parent, false);
+        View listItem = layoutInflater.inflate(R.layout.history_item, parent, false);
         HistoryAdapter.ViewHolder viewHolder = new HistoryAdapter.ViewHolder(listItem);
         return viewHolder;
     }
@@ -52,7 +52,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 company = comp.getKey();
         }
         if (travel != null) {
-            holder.kilometers.setText((int) travel.calcKilometers());
+            holder.kilometers.setText(String.valueOf(travel.calcKilometers()));
             holder.name.setText(company);
             holder.paidUp.setOnClickListener(v -> {
                 if (listener != null)
@@ -83,7 +83,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         Button call;
         Button paidUp;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.companyName);
             kilometers = (TextView) itemView.findViewById(R.id.kilometers);
