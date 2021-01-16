@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     android:scrollbars="vertical"
     android:id="@+id/companyRecyclerView"
-    tools:context=".UI.ui.gallery.CompanyTravelsFragment">
+    tools:context=".UI.ui.companies.CompanyTravelsFragment">
 
 </androidx.recyclerview.widget.RecyclerView>

@@ -1,5 +1,6 @@
 package com.example.TransportationManagement.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.TransportationManagement.Model.MyService;
 import com.example.TransportationManagement.R;
 import com.google.android.material.navigation.NavigationView;
 
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
+        startService(new Intent(getBaseContext(), MyService.class));
     }
 
     @Override

@@ -1,7 +1,6 @@
-package com.example.TransportationManagement.UI.ui.gallery;
+package com.example.TransportationManagement.UI.ui.companies;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +23,6 @@ import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.R;
 import com.example.TransportationManagement.UI.MainViewModel;
 import com.example.TransportationManagement.adapter.CompanyAdapter;
-import com.example.TransportationManagement.adapter.RegisteredAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
