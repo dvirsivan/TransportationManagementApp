@@ -1,12 +1,7 @@
 package com.example.TransportationManagement.adapter;
 
-import android.Manifest;
-import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +9,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.TransportationManagement.Entities.Travel;
@@ -29,15 +24,10 @@ import com.example.TransportationManagement.Entities.UserLocation;
 
 import com.example.TransportationManagement.R;
 import com.example.TransportationManagement.UI.MainActivity;
-import com.example.TransportationManagement.UI.MainViewModel;
-import com.example.TransportationManagement.UI.ui.gallery.CompanyTravelsFragment;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyHolder> {
+public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyHolder> implements Filterable {
     private List<Travel> companyItems;
     private Context context;
     private CompanyTravelListener listener;
@@ -67,7 +57,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
         holder.cName.setText("name:\n"+companyItem.getClientName());
         holder.numPass.setText("travelers:22");//companyItem.getAmountTravelers()
         holder.source.setText("address:\n"+companyItem.getSource().convertToString(context));
-        spinerAdapter(holder.dest,UserLocation.convertToString(context,companyItem.getDestinations()));
+        spinnerAdapter(holder.dest,UserLocation.convertToString(context,companyItem.getDestinations()));
         holder.accept.setOnClickListener(  view->
         {
             if(listener!=null)
@@ -79,7 +69,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
         });
         holder.acceptedBox.setChecked(Travel.RequestType.getTypeInt(companyItem.getStatus()) == 1);
     }
-    private void spinerAdapter(Spinner spin,List list){
+    private void spinnerAdapter(Spinner spin, List list){
         ArrayAdapter aa = new ArrayAdapter(this.context,android.R.layout.simple_spinner_item,list);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(aa);
@@ -89,6 +79,34 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
     @Override
     public int getItemCount() {
         return companyItems.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return null;
+    }
+    private  class distanceFilter extends Filter{
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+            int maxDistance;
+            if(constraint==null||constraint.length()==0||constraint=="without"){
+                results.values=companyItems;
+                results.count=companyItems.size();
+            }
+            else {
+                maxDistance = Integer.parseInt(constraint.toString());
+
+
+            }
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+        }
     }
 
     public static class CompanyHolder extends RecyclerView.ViewHolder {

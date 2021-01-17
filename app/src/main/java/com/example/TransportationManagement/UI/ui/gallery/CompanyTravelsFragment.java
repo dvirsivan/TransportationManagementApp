@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,9 +48,9 @@ public class CompanyTravelsFragment extends Fragment {
         final RecyclerView recyclerView = root.findViewById(R.id.companyRecyclerView);
         CompanyAdapter companyAdapter = new CompanyAdapter(travels,getContext());
         currentUser=mAuth.getCurrentUser();
+        setfilter(root.findViewById(R.id.filterButton),root.findViewById(R.id.filterSpinner));
        // updateListView(travels,recyclerView);
         //CompanyAdapter companyAdapter = new CompanyAdapter();
-
         mainViewModel.getMutableCompany().observe(this.getActivity(), travelList -> {
             travels = travelList;
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -62,6 +64,8 @@ public class CompanyTravelsFragment extends Fragment {
 
         return root;
     }
+
+
     private void action(int position, View view){
         Travel travel = travels.get(position);
         if(view.getId()==R.id.callButton){
@@ -89,6 +93,18 @@ public class CompanyTravelsFragment extends Fragment {
         }
 
     }
+
+
+    private void setfilter(Button filterButton, Spinner filterSpinner){
+
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), filterSpinner.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
  private String keyFromMail(String mail){
         int i = 0;
         String res="";
