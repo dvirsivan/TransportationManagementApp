@@ -1,4 +1,4 @@
-package com.example.TransportationManagement.UI.ui.gallery;
+package com.example.TransportationManagement.UI.ui.companies;
 
 import android.Manifest;
 import android.content.Context;
