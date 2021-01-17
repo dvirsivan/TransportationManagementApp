@@ -69,14 +69,11 @@ public class RegisteredAdapter extends BaseAdapter {
         spinerAdapter(viewHolder.destinations, UserLocation.convertToString(context,currentItem.getDestinations()));
         spinerAdapter(viewHolder.company,List.of(currentItem.getCompany().keySet()));
         spinerAdapter(viewHolder.statuses,Renum);
-        viewHolder.submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String comp = viewHolder.company.getSelectedItem().toString();
-                int status = viewHolder.statuses.getSelectedItemPosition();
-                if (listener != null)
-                    listener.onButtonClicked(position,status,comp);
-            }
+        viewHolder.submit.setOnClickListener(v -> {
+            String comp = viewHolder.company.getSelectedItem().toString();
+            int status = viewHolder.statuses.getSelectedItemPosition();
+            if (listener != null)
+                listener.onButtonClicked(position,status,comp);
         });
         return convertView;
     }

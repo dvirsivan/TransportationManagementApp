@@ -36,6 +36,11 @@ public class RegisteredFragment extends Fragment {
             public void onChanged(List<Travel> travelList) {
                 travels = new ArrayList<>(travelList);
                 RegisteredAdapter registeredAdapter = new RegisteredAdapter(getContext(), travels);
+                registeredAdapter.setListener((position, status, company) -> {
+                    Travel travel = travels.get(position);
+                    travel.setStatus(Travel.RequestType.getType(status));
+                    travel.setCompany(company,true);
+                });
                 listView.setAdapter(registeredAdapter);
             }
         });
