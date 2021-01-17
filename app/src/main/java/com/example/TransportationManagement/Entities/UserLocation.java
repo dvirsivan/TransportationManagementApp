@@ -54,7 +54,9 @@ public class UserLocation {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return addresses.get(0).getLocality()+" - "+addresses.get(0).getCountryName();
+        if (addresses!=null && addresses.size()>0)
+            return addresses.get(0).getLocality()+" - "+addresses.get(0).getCountryName();
+        return this.toString();
     }
     public static List<String> convertToString(Context context, List<UserLocation> userLocationList){
         List<String> locations = new ArrayList<>();

@@ -4,13 +4,16 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,7 +30,6 @@ import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.R;
 import com.example.TransportationManagement.UI.MainViewModel;
 import com.example.TransportationManagement.adapter.CompanyAdapter;
-import com.example.TransportationManagement.adapter.RegisteredAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -40,28 +42,49 @@ public class CompanyTravelsFragment extends Fragment {
     List<Travel> travels = new ArrayList<>();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private Location currentLocation;
+    CompanyAdapter companyAdapter;
+    int currentMaxDistance = Integer.MAX_VALUE;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mainViewModel =
                 new ViewModelProvider(getActivity()).get(MainViewModel.class);
         View root = inflater.inflate(R.layout.fragment_company_travels, container, false);
         final RecyclerView recyclerView = root.findViewById(R.id.companyRecyclerView);
-        CompanyAdapter companyAdapter = new CompanyAdapter(travels,getContext());
+        //CompanyAdapter companyAdapter = new CompanyAdapter(travels,getContext());
         currentUser=mAuth.getCurrentUser();
-        setfilter(root.findViewById(R.id.filterButton),root.findViewById(R.id.filterSpinner));
+        setFilter(root.findViewById(R.id.filterButton),root.findViewById(R.id.filterSpinner));
        // updateListView(travels,recyclerView);
         //CompanyAdapter companyAdapter = new CompanyAdapter();
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+
+        // Define a listener that responds to location updates
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                currentLocation =location;
+                Toast.makeText(getContext(), "found GPS", Toast.LENGTH_LONG).show();
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {   }
+
+            public void onProviderEnabled(String provider) { }
+
+            public void onProviderDisabled(String provider) { }
+        };
+        getLocation();
         mainViewModel.getMutableCompany().observe(this.getActivity(), travelList -> {
             travels = travelList;
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            CompanyAdapter adapter = new CompanyAdapter(travels, getContext());
-            adapter.setListener((position, view) -> action(position,view));
-            recyclerView.setAdapter(adapter);
+            companyAdapter = new CompanyAdapter(travels, getContext());
+            companyAdapter.setListener((position, view) -> action(position,view));
+            recyclerView.setAdapter(companyAdapter);
         });
-
-        companyAdapter.setListener((position, view) -> action(position,view));
-
         return root;
     }
 
@@ -76,7 +99,7 @@ public class CompanyTravelsFragment extends Fragment {
                 Toast.makeText(getContext(), "no phone number exist", Toast.LENGTH_LONG).show();
             else if (ActivityCompat.checkSelfPermission(getContext(),
                     Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ) {
-                Toast.makeText(getContext(), "please approve phone call", Toast.LENGTH_LONG).show();
+                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 5);
             }
             else
                 getContext().startActivity(callIntent);
@@ -94,14 +117,33 @@ public class CompanyTravelsFragment extends Fragment {
 
     }
 
+    private void getLocation() {
 
-    private void setfilter(Button filterButton, Spinner filterSpinner){
+        //     Check the SDK version and whether the permission is already granted or not.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
 
-        filterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), filterSpinner.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
-            }
+        } else {
+            // Android version is lesser than 6.0 or the permission is already granted.
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
+        }
+
+    }
+
+    private void setFilter(Button filterButton, Spinner filterSpinner){
+
+        filterButton.setOnClickListener(v -> {
+           if(currentLocation !=null){
+               String maxDistance = filterSpinner.getSelectedItem().toString();
+               if(maxDistance.equals("without") || Integer.parseInt(maxDistance)>currentMaxDistance)
+                   companyAdapter.resetData();
+               if(!maxDistance.equals("without"))
+                   currentMaxDistance = Integer.parseInt(maxDistance);
+               companyAdapter.setLocation(currentLocation);
+               companyAdapter.getFilter().filter(filterSpinner.getSelectedItem().toString());
+           }
+
         });
     }
 

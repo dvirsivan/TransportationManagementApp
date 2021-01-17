@@ -1,6 +1,7 @@
 package com.example.TransportationManagement.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -62,6 +64,10 @@ public class RegisteredAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        if(position%2==0)
+            viewHolder.linearLayout.setBackgroundColor(Color.LTGRAY);
+        else
+            viewHolder.linearLayout.setBackgroundColor(Color.WHITE);
         List<String> Renum = Arrays.asList("Sent", "Accepted", "Run", "close");
         Travel currentItem = (Travel) getItem(position);
         viewHolder.source.setText(currentItem.getSource().convertToString(context));
@@ -91,6 +97,7 @@ public class RegisteredAdapter extends BaseAdapter {
         Spinner statuses;
         Spinner company;
         Button submit;
+        LinearLayout linearLayout;
         public ViewHolder(View view) {
             this.source = (TextView)view.findViewById(R.id.sourceText);
             this.date = (TextView)view.findViewById(R.id.dateText);
@@ -98,6 +105,7 @@ public class RegisteredAdapter extends BaseAdapter {
             this.statuses = (Spinner) view.findViewById(R.id.statuSpinner);
             this.company = (Spinner) view.findViewById(R.id.companySpinner);
             this.submit = (Button) view.findViewById(R.id.submit);
+            this.linearLayout = (LinearLayout)view.findViewById(R.id.registeredItemLayout);
         }
     }
     public interface RegisteredTravelListener {

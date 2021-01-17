@@ -4,11 +4,13 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if(position%2==0)
+            holder.linearLayout.setBackgroundColor(Color.LTGRAY);
         Travel travel = travels.get(position);
         String company = "";
         for (Map.Entry<String, Boolean> comp : travel.getCompany().entrySet()){
@@ -82,13 +86,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         TextView kilometers;
         Button call;
         Button paidUp;
-
+        LinearLayout linearLayout;
         public ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.companyName);
             kilometers = (TextView) itemView.findViewById(R.id.kilometers);
             call = (Button) itemView.findViewById(R.id.callButtonHistory);
             paidUp = (Button) itemView.findViewById(R.id.changeStatusButton);
+            linearLayout = (LinearLayout)itemView.findViewById(R.id.historyItemLayout);
         }
     }
     public interface HistoryTravelListener {
