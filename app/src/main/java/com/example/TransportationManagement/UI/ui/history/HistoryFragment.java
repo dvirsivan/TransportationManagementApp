@@ -46,6 +46,8 @@ public class HistoryFragment extends Fragment {
     }
 
     private void action(int position) {
-        // need to implement!!!
+        Travel travel = travels.get(position);
+        travel.setStatus(Travel.RequestType.paidUp);
+        mainViewModel.updateTravel(travel);
     }
 }

@@ -26,6 +26,7 @@ public class MyService extends Service{
     TravelFirebaseDataSource firebaseDataSource = TravelFirebaseDataSource.getInstance();
     List<Travel> allTravels;
     Thread thread;
+    long count;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -35,6 +36,7 @@ public class MyService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
+        count = 0;
         allTravels = firebaseDataSource.getAllTravels();
         thread = new Thread(){
             @Override
@@ -44,19 +46,17 @@ public class MyService extends Service{
                 sendBroadcast(intent);
             }
         };
-
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
         travels.addValueEventListener(new ValueEventListener() {
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long count = snapshot.getChildrenCount();
                 Log.d(TAG,"out of func!");
-                if (allTravels.size() < count){
-                    allTravels = firebaseDataSource.getAllTravels();
+                if (count < snapshot.getChildrenCount()){
+                    allTravels.clear();
+                    for (DataSnapshot snap : snapshot.getChildren()){
+                        Travel travel = snap.getValue(Travel.class);
+                        allTravels.add(travel);
+                    }
+                    count = allTravels.size();
                     thread.run();
                     Log.d(TAG,"in func!");
                 }
@@ -65,6 +65,11 @@ public class MyService extends Service{
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
         return START_STICKY;
     }
 

@@ -12,6 +12,7 @@ import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.Model.TravelFirebaseDataSource;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class TravelRepository implements ITravelRepository {
@@ -19,14 +20,7 @@ public class TravelRepository implements ITravelRepository {
     private IHistoryDataSource historyDataSource;
     private ITravelRepository.NotifyToTravelListListener notifyToTravelListListenerRepository;
     List<Travel> travelList;
-
-
-
-
-
-
-
-
+    LinkedList<Travel> historyTravels;
 
     private static TravelRepository instance;
 
@@ -39,14 +33,26 @@ public class TravelRepository implements ITravelRepository {
     private TravelRepository(Application application) {
         travelDataSource = TravelFirebaseDataSource.getInstance();
         historyDataSource = new HistoryDataSource(application.getApplicationContext());
-
+        sortTravelsForHistory(travelDataSource.getAllTravels());
         ITravelDataSource.NotifyToTravelListListener notifyToTravelListListener = () -> {
             travelList = travelDataSource.getAllTravels();
+            checkUpdate();
             if (notifyToTravelListListenerRepository != null)
                 notifyToTravelListListenerRepository.onTravelsChanged();
-
         };
         travelDataSource.setNotifyToTravelListListener(notifyToTravelListListener);
+    }
+
+    private void checkUpdate() {
+        for (Travel travel: travelList){
+            if (travel.getStatus() == Travel.RequestType.close){
+                int indexTravel = historyTravels.indexOf(travel);
+                if (indexTravel == -1){
+                    historyTravels.add(travel);
+                    historyDataSource.addTravel(travel);
+                }
+            }
+        }
     }
 
     @Override
@@ -71,6 +77,15 @@ public class TravelRepository implements ITravelRepository {
 
     public void setNotifyToTravelListListener(ITravelRepository.NotifyToTravelListListener l) {
         notifyToTravelListListenerRepository = l;
+    }
+
+    public void sortTravelsForHistory(List<Travel> trevels){
+        for (Travel travel: trevels){
+            if (travel.getStatus() == Travel.RequestType.close) {
+                historyDataSource.addTravel(travel);
+                historyTravels.add(travel);
+            }
+        }
     }
 
 }
