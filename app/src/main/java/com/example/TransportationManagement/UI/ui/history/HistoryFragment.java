@@ -1,4 +1,4 @@
-package com.example.TransportationManagement.UI.ui.slideshow;
+package com.example.TransportationManagement.UI.ui.history;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.R;
 import com.example.TransportationManagement.UI.MainViewModel;
-import com.example.TransportationManagement.adapter.CompanyAdapter;
 import com.example.TransportationManagement.adapter.HistoryAdapter;
 
 import java.util.ArrayList;

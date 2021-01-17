@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_registered"
-        android:name="com.example.TransportationManagement.UI.ui.home.RegisteredFragment"
+        android:name="com.example.TransportationManagement.UI.ui.registered.RegisteredFragment"
         android:label="Registered"
         tools:layout="@layout/fragment_registered" />
 
     <fragment
         android:id="@+id/nav_compenies"
-        android:name="com.example.TransportationManagement.UI.ui.gallery.CompanyTravelsFragment"
+        android:name="com.example.TransportationManagement.UI.ui.companies.CompanyTravelsFragment"
         android:label="Companies"
         tools:layout="@layout/fragment_company_travels" />
 
     <fragment
         android:id="@+id/nav_history"
-        android:name="com.example.TransportationManagement.UI.ui.slideshow.HistoryFragment"
+        android:name="com.example.TransportationManagement.UI.ui.history.HistoryFragment"
         android:label="History Travels"
         tools:layout="@layout/fragment_history" />
 </navigation>
