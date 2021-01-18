@@ -45,16 +45,19 @@ public class RegisteredFragment extends Fragment {
                 registeredAdapter.setListener((position, status, company) -> {
                     Travel travel = travels.get(position);
                     travel.setStatus(Travel.RequestType.getType(status));
+                    travel.setCompany(company,true);
                     mainViewModel.updateTravel(travel);
                 });
                 listView.setAdapter(registeredAdapter);
             }
         });
-        registeredAdapter.setListener((position, status, company) -> {
+        /*registeredAdapter.setListener((position, status, company) -> {
             Travel travel = travels.get(position);
             travel.setStatus(Travel.RequestType.getType(status));
+            travel.setCompany(company, true);
             mainViewModel.updateTravel(travel);
-        });
+
+        });*/
         return root;
     }
 }

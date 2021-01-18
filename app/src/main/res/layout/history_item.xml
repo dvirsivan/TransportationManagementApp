@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/historyItemLayout"
@@ -13,19 +13,13 @@
         tools:layout_editor_absoluteX="-157dp"
         tools:layout_editor_absoluteY="195dp">
 
-        <TextView
+        <Button
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:id="@+id/companyName"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:id="@+id/kilometers"/>
+            android:id="@+id/callButtonHistory"
+            android:text="send mail"/>
 
         <Button
             android:layout_width="match_parent"
@@ -35,13 +29,25 @@
             android:text="paid up"
             android:id="@+id/changeStatusButton"/>
 
-        <Button
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:id="@+id/callButtonHistory"
-            android:text="call"/>
+            android:id="@+id/kilometers"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/companyName"/>
+
+
+
+
+
+
 
     </LinearLayout>
 

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.TransportationManagement.Entities.Company;
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.Repository.ITravelRepository;
 import com.example.TransportationManagement.Repository.TravelRepository;
@@ -23,7 +22,6 @@ public class MainViewModel extends AndroidViewModel {
     MutableLiveData<List<Travel>> mutableHistoryTravels = new MutableLiveData<>();
     MutableLiveData<List<Travel>> mutableCompany = new MutableLiveData<>();
     MutableLiveData<List<Travel>> mutableRegistered = new MutableLiveData<>();
-    List<Company> companies;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser;
     private SharedPreferences sharedPreferences;
@@ -34,24 +32,26 @@ public class MainViewModel extends AndroidViewModel {
 
         repository = TravelRepository.getInstance(p);
         currentUser = mAuth.getCurrentUser();
-        ITravelRepository.NotifyToTravelListListener notifyToTravelListListener=new ITravelRepository.NotifyToTravelListListener() {
+        repository.setNotifyToTravelListListener(new ITravelRepository.NotifyToTravelListListener() {
             @Override
             public void onTravelsChanged() {
                 List<Travel> travelList = repository.getAllTravels();
                 mutableHistoryTravels.setValue(travelList);
                 updateCompany(travelList);
                 updateRegistered(travelList);
-                updateHistoryTravels(travelList);
             }
-        };
-        repository.setNotifyToTravelListListener(notifyToTravelListListener);
-        companies = repository.getCompanies();
+        });
+        repository.setNotifyToHistoryTravelListListener(new ITravelRepository.NotifyToHistoryTravelListListener() {
+            @Override
+            public void onHistoryTravelsChanged() {
+                List<Travel> travelHistoryList = repository.getAllHistoryTravels();
+                mutableCompany.setValue(travelHistoryList);
+            }
+        });
 
     }
 
-    public List<Company> getCompanies() {
-        return companies;
-    }
+
 
     private void updateCompany(List<Travel> travelList){
         ArrayList<Travel> companyTravels = new ArrayList<>();
@@ -66,7 +66,7 @@ public class MainViewModel extends AndroidViewModel {
     private void updateRegistered(List<Travel> travelList){
         ArrayList<Travel> registeredTravel = new ArrayList<>();
         for(Travel travel:travelList){
-            if(Travel.RequestType.getTypeInt(travel.getStatus()) < 1 )//&& travel.getClientEmail().equals(currentUser.getEmail())
+            if(Travel.RequestType.getTypeInt(travel.getStatus()) < 3 )//&& travel.getClientEmail().equals(currentUser.getEmail())
             {
                 registeredTravel.add(travel);
             }

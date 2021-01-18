@@ -49,6 +49,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if(position%2==0)
             holder.linearLayout.setBackgroundColor(Color.LTGRAY);
+        else
+            holder.linearLayout.setBackgroundColor(Color.WHITE);
         Travel travel = travels.get(position);
         String company = "";
         for (Map.Entry<String, Boolean> comp : travel.getCompany().entrySet()){
