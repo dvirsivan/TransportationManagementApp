@@ -82,7 +82,7 @@ public class RegisteredAdapter extends BaseAdapter {
                 int status = viewHolder.statuses.getSelectedItemPosition();
                 if (listener != null)
                     listener.onButtonClicked(position,status,comp);
-                }
+            }
         });
 
         return convertView;

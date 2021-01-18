@@ -56,7 +56,7 @@ public class MainViewModel extends AndroidViewModel {
     private void updateCompany(List<Travel> travelList){
         ArrayList<Travel> companyTravels = new ArrayList<>();
         for (Travel travel:travelList){
-            if(Travel.RequestType.getTypeInt(travel.getStatus()) < 2){
+            if(Travel.RequestType.getTypeInt(travel.getStatus()) < 2){//אם זה accepted זה צריך להיות פה?
                 companyTravels.add(travel);
             }
         }

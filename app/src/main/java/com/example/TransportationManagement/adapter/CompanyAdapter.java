@@ -71,7 +71,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
             if(listener!=null)
                 listener.onButtonClicked(companyItem,view);
         });
-        holder.acceptedBox.setChecked(Travel.RequestType.getTypeInt(companyItem.getStatus()) > 1);
+        holder.acceptedBox.setChecked(Travel.RequestType.getTypeInt(companyItem.getStatus()) > 0);
     }
     private void spinnerAdapter(Spinner spin, List list){
         ArrayAdapter aa = new ArrayAdapter(this.context,android.R.layout.simple_spinner_item,list);

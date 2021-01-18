@@ -32,7 +32,7 @@ public class TravelRepository implements ITravelRepository {
         travelDataSource = TravelFirebaseDataSource.getInstance();
         historyDataSource = new HistoryDataSource(application.getApplicationContext());
         //sortTravelsForHistory(travelDataSource.getAllTravels());
-        ITravelDataSource.NotifyToTravelListListener notifyToTravelListListener = () -> {
+         ITravelDataSource.NotifyToTravelListListener notifyToTravelListListener = () -> {
             travelList = travelDataSource.getAllTravels();
             checkUpdate();
             if (notifyToTravelListListenerRepository != null)
@@ -47,11 +47,12 @@ public class TravelRepository implements ITravelRepository {
             if (travel.getStatus() == Travel.RequestType.close){
                 //int indexTravel = historyTravels.indexOf(travel);
                 //if (indexTravel == -1){
-                    historyTravels.add(travel);
-                    historyDataSource.addTravel(travel);
+                historyTravels.add(travel);
+                historyDataSource.addTravel(travel);
 
                 //}
             }
+
             if(notifyToHistoryTravelListListener != null)
                 notifyToHistoryTravelListListener.onHistoryTravelsChanged();
         }

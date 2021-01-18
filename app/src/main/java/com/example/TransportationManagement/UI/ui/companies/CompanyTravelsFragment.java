@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.TransportationManagement.Entities.Company;
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.R;
 import com.example.TransportationManagement.UI.MainViewModel;
@@ -131,20 +130,20 @@ public class CompanyTravelsFragment extends Fragment {
     private void setFilter(Button filterButton, Spinner filterSpinner){
 
         filterButton.setOnClickListener(v -> {
-           if(currentLocation != null){
-               String maxDistance = filterSpinner.getSelectedItem().toString();
-               if(maxDistance.equals("without") || Integer.parseInt(maxDistance)>currentMaxDistance)
-                   companyAdapter.resetData();
-               if(!maxDistance.equals("without"))
-                   currentMaxDistance = Integer.parseInt(maxDistance);
-               companyAdapter.setLocation(currentLocation);
-               companyAdapter.getFilter().filter(filterSpinner.getSelectedItem().toString());
-           }
+            if(currentLocation != null){
+                String maxDistance = filterSpinner.getSelectedItem().toString();
+                if(maxDistance.equals("without") || Integer.parseInt(maxDistance)>currentMaxDistance)
+                    companyAdapter.resetData();
+                if(!maxDistance.equals("without"))
+                    currentMaxDistance = Integer.parseInt(maxDistance);
+                companyAdapter.setLocation(currentLocation);
+                companyAdapter.getFilter().filter(filterSpinner.getSelectedItem().toString());
+            }
 
         });
     }
 
- private String keyFromMail(String mail){
+    private String keyFromMail(String mail){
         int i = 0;
         String res="";
         while (mail.charAt(i)!='@'){
@@ -152,5 +151,5 @@ public class CompanyTravelsFragment extends Fragment {
             i++;
         }
         return res;
- }
+    }
 }
