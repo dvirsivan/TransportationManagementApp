@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.TransportationManagement.Entities.Company;
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.Entities.UserLocation;
 import com.example.TransportationManagement.Model.RegisteredItem;
@@ -32,10 +33,12 @@ import java.util.List;
 public class RegisteredAdapter extends BaseAdapter {
     private Context context;
     private List<Travel> items;
-    RegisteredTravelListener listener;
-    public RegisteredAdapter(Context context, List<Travel> items) {
+    private RegisteredTravelListener listener;
+    private List<Company> companies;
+    public RegisteredAdapter(Context context, List<Travel> items, List<Company> companies) {
         this.context = context;
         this.items = items;
+        this.companies = companies;
     }
 
     @Override
@@ -73,11 +76,11 @@ public class RegisteredAdapter extends BaseAdapter {
         viewHolder.source.setText(currentItem.getSource().convertToString(context));
         viewHolder.date.setText(currentItem.getStartDate());
         spinerAdapter(viewHolder.destinations, UserLocation.convertToString(context,currentItem.getDestinations()));
-        spinerAdapter(viewHolder.company,new ArrayList(currentItem.getCompany().keySet()));
+        spinerAdapter(viewHolder.company,companies);
         spinerAdapter(viewHolder.statuses,Renum);
 
         viewHolder.submit.setOnClickListener(v -> {
-            String comp = viewHolder.company.getSelectedItem().toString();
+            String comp = ((Company)viewHolder.company.getSelectedItem()).toString();
             int status = viewHolder.statuses.getSelectedItemPosition();
             if (listener != null)
                 listener.onButtonClicked(position,status,comp);

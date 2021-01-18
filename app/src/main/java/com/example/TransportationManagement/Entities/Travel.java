@@ -44,7 +44,6 @@ public class Travel {
     private UserLocation source;
     private String amountTravelers;
 
-
     public RequestType getStatus() {return status;}
 
     public String getStartDate() {return new String(startDate);}

@@ -5,6 +5,7 @@ import android.app.Application;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.TransportationManagement.Entities.Company;
 import com.example.TransportationManagement.Model.IHistoryDataSource;
 import com.example.TransportationManagement.Model.ITravelDataSource;
 import com.example.TransportationManagement.Model.HistoryDataSource;
@@ -33,6 +34,7 @@ public class TravelRepository implements ITravelRepository {
     private TravelRepository(Application application) {
         travelDataSource = TravelFirebaseDataSource.getInstance();
         historyDataSource = new HistoryDataSource(application.getApplicationContext());
+        historyTravels = new LinkedList<>();
         sortTravelsForHistory(travelDataSource.getAllTravels());
         ITravelDataSource.NotifyToTravelListListener notifyToTravelListListener = () -> {
             travelList = travelDataSource.getAllTravels();
@@ -75,12 +77,17 @@ public class TravelRepository implements ITravelRepository {
         return travelDataSource.getIsSuccess();
     }
 
+    @Override
+    public List<Company> getCompanies() {
+        return travelDataSource.getCompanies();
+    }
+
     public void setNotifyToTravelListListener(ITravelRepository.NotifyToTravelListListener l) {
         notifyToTravelListListenerRepository = l;
     }
 
-    public void sortTravelsForHistory(List<Travel> trevels){
-        for (Travel travel: trevels){
+    public void sortTravelsForHistory(List<Travel> travels){
+        for (Travel travel: travels){
             if (travel.getStatus() == Travel.RequestType.close) {
                 historyDataSource.addTravel(travel);
                 historyTravels.add(travel);

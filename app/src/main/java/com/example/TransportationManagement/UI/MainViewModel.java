@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.TransportationManagement.Entities.Company;
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.Repository.ITravelRepository;
 import com.example.TransportationManagement.Repository.TravelRepository;
@@ -22,6 +23,7 @@ public class MainViewModel extends AndroidViewModel {
     MutableLiveData<List<Travel>> mutableHistoryTravels = new MutableLiveData<>();
     MutableLiveData<List<Travel>> mutableCompany = new MutableLiveData<>();
     MutableLiveData<List<Travel>> mutableRegistered = new MutableLiveData<>();
+    List<Company> companies;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser;
     private SharedPreferences sharedPreferences;
@@ -43,11 +45,13 @@ public class MainViewModel extends AndroidViewModel {
             }
         };
         repository.setNotifyToTravelListListener(notifyToTravelListListener);
-
+        companies = repository.getCompanies();
 
     }
 
-
+    public List<Company> getCompanies() {
+        return companies;
+    }
 
     private void updateCompany(List<Travel> travelList){
         ArrayList<Travel> companyTravels = new ArrayList<>();

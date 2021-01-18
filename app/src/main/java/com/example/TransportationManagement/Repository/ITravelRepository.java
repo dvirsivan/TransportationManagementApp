@@ -2,6 +2,7 @@ package com.example.TransportationManagement.Repository;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.TransportationManagement.Entities.Company;
 import com.example.TransportationManagement.Model.ITravelDataSource;
 import com.example.TransportationManagement.Entities.Travel;
 
@@ -16,6 +17,6 @@ public interface ITravelRepository {
     interface NotifyToTravelListListener {
         void onTravelsChanged();
     }
-
+    List<Company> getCompanies();
     void setNotifyToTravelListListener(ITravelRepository.NotifyToTravelListListener l);
 }

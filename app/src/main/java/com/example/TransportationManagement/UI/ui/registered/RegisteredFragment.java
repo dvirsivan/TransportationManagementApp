@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.TransportationManagement.Entities.Company;
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.R;
 import com.example.TransportationManagement.UI.MainViewModel;
@@ -23,6 +24,8 @@ public class RegisteredFragment extends Fragment {
 
     private ArrayList<Travel> travels;
     MainViewModel mainViewModel;
+    List<Company> companies;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -30,12 +33,15 @@ public class RegisteredFragment extends Fragment {
                 new ViewModelProvider(getActivity()).get(MainViewModel.class);
         View root = inflater.inflate(R.layout.fragment_registered, container, false);
         ListView listView = ((ListView) root.findViewById(R.id.registeredList));
-        RegisteredAdapter registeredAdapter = new RegisteredAdapter(getContext(), travels);
+        companies = mainViewModel.getCompanies();
+        RegisteredAdapter registeredAdapter = new RegisteredAdapter(getContext(), travels ,companies);
+
+
         mainViewModel.getMutableRegistered().observe(this.getActivity(), new Observer<List<Travel>>() {
             @Override
             public void onChanged(List<Travel> travelList) {
                 travels = new ArrayList<>(travelList);
-                RegisteredAdapter registeredAdapter = new RegisteredAdapter(getContext(), travels);
+                RegisteredAdapter registeredAdapter = new RegisteredAdapter(getContext(), travels, companies);
                 registeredAdapter.setListener((position, status, company) -> {
                     Travel travel = travels.get(position);
                     travel.setStatus(Travel.RequestType.getType(status));

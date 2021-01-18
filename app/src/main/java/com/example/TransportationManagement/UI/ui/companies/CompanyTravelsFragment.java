@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.TransportationManagement.Entities.Company;
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.R;
 import com.example.TransportationManagement.UI.MainViewModel;
@@ -54,11 +55,8 @@ public class CompanyTravelsFragment extends Fragment {
                 new ViewModelProvider(getActivity()).get(MainViewModel.class);
         View root = inflater.inflate(R.layout.fragment_company_travels, container, false);
         final RecyclerView recyclerView = root.findViewById(R.id.companyRecyclerView);
-        //CompanyAdapter companyAdapter = new CompanyAdapter(travels,getContext());
-        currentUser=mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
         setFilter(root.findViewById(R.id.filterButton),root.findViewById(R.id.filterSpinner));
-       // updateListView(travels,recyclerView);
-        //CompanyAdapter companyAdapter = new CompanyAdapter();
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
 
@@ -134,7 +132,7 @@ public class CompanyTravelsFragment extends Fragment {
     private void setFilter(Button filterButton, Spinner filterSpinner){
 
         filterButton.setOnClickListener(v -> {
-           if(currentLocation !=null){
+           if(currentLocation != null){
                String maxDistance = filterSpinner.getSelectedItem().toString();
                if(maxDistance.equals("without") || Integer.parseInt(maxDistance)>currentMaxDistance)
                    companyAdapter.resetData();

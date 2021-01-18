@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.TransportationManagement.Entities.Company;
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.Entities.UserLocation;
 
@@ -28,16 +29,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyHolder> implements Filterable {
-    private List<Travel> companyItems;
+    private List<Travel> travels;
     private Context context;
     private CompanyTravelListener listener;
     private DistanceFilter distanceFilter;
-    private List<Travel>originalCompanyItems;
+    private List<Travel> originalCompanyItems;
 
-    public CompanyAdapter(List<Travel> companyItems, Context context) {
-        this.companyItems = companyItems;
-        this.originalCompanyItems = companyItems;
+
+    public CompanyAdapter(List<Travel> travels, Context context) {
+        this.travels = travels;
+        this.originalCompanyItems = travels;
         this.context = context;
+
     }
 
     @NonNull
@@ -55,13 +58,14 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
             holder.linearLayout.setBackgroundColor(Color.LTGRAY);
         else
             holder.linearLayout.setBackgroundColor(Color.WHITE);
-        Travel companyItem = companyItems.get(position);
-        holder.sumDays.setText("sum of\n days:"+String.valueOf(companyItem.getSumDays()));
-        holder.date.setText("date:\n"+companyItem.getStartDate());
-        holder.cName.setText("name:\n"+companyItem.getClientName());
-        holder.numPass.setText("travelers:22");//companyItem.getAmountTravelers()
-        holder.source.setText("address:\n"+companyItem.getSource().convertToString(context));
-        spinnerAdapter(holder.dest,UserLocation.convertToString(context,companyItem.getDestinations()));
+        Travel travel = travels.get(position);
+        holder.sumDays.setText("sum of\n days:"+String.valueOf(travel.getSumDays()));
+        holder.date.setText("date:\n"+travel.getStartDate());
+        holder.cName.setText("name:\n"+travel.getClientName());
+        holder.numPass.setText("travelers:22");//travel.getAmountTravelers()
+        holder.source.setText("address:\n"+travel.getSource().convertToString(context));
+        spinnerAdapter(holder.dest,UserLocation.convertToString(context,travel.getDestinations()));
+
         holder.accept.setOnClickListener(  view->
         {
             if(listener!=null)
@@ -71,7 +75,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
             if(listener!=null)
                 listener.onButtonClicked(position,view);
         });
-        holder.acceptedBox.setChecked(Travel.RequestType.getTypeInt(companyItem.getStatus()) == 1);
+        holder.acceptedBox.setChecked(Travel.RequestType.getTypeInt(travel.getStatus()) == 1);
     }
     private void spinnerAdapter(Spinner spin, List list){
         ArrayAdapter aa = new ArrayAdapter(this.context,android.R.layout.simple_spinner_item,list);
@@ -86,7 +90,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
 
     @Override
     public int getItemCount() {
-        return companyItems.size();
+        return travels.size();
     }
 
     @Override
@@ -95,7 +99,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
             distanceFilter = new DistanceFilter();
         return distanceFilter;
     }
-    public void resetData(){companyItems = originalCompanyItems;}
+    public void resetData(){
+        travels = originalCompanyItems;}
     private  class DistanceFilter extends Filter{
         Location location;
         public final static double AVERAGE_RADIUS_OF_EARTH = 6371;
@@ -104,13 +109,13 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
             FilterResults results = new FilterResults();
             int maxDistance;
             if(constraint==null||constraint.length()==0||constraint=="without"||location==null){
-                results.values=companyItems;
-                results.count=companyItems.size();
+                results.values= travels;
+                results.count= travels.size();
             }
             else if(location!=null) {
                 maxDistance = Integer.parseInt(constraint.toString());
                 List<Travel> travelList = new ArrayList<>();
-                for(Travel travel:companyItems){
+                for(Travel travel: travels){
                     if(calculateDistance(location.getLatitude(),location.getLongitude(),travel.getSource().getLat(),travel.getSource().getLon())<=maxDistance){
                         travelList.add(travel);
                     }
@@ -126,7 +131,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
             if (results.count == 0)
                 notifyDataSetChanged();
             else {
-                companyItems = (List<Travel>) results.values;
+                travels = (List<Travel>) results.values;
                 notifyDataSetChanged();
             }
 

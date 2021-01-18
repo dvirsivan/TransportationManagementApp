@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.TransportationManagement.Entities.Company;
 import com.example.TransportationManagement.Entities.Travel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -15,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public  class TravelFirebaseDataSource implements  ITravelDataSource{
@@ -28,7 +30,7 @@ public  class TravelFirebaseDataSource implements  ITravelDataSource{
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference travels = firebaseDatabase.getReference("AllTravels");
-
+    DatabaseReference companies = firebaseDatabase.getReference("companies");
 
 
     private static TravelFirebaseDataSource instance;
@@ -63,7 +65,28 @@ public  class TravelFirebaseDataSource implements  ITravelDataSource{
         });
 
     }
+    public List<Company> getCompanies(){
+        LinkedList<Company> res = new LinkedList<>();
+        companies.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot snap : snapshot.getChildren()){
+                        Company company = new Company();
+                        company.setEmail(snap.child("email").getValue().toString());
+                        company.setPhone(Integer.parseInt(snap.child("phone").getValue().toString()));
+                        res.add(company);
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return res;
+    }
 
     public void setNotifyToTravelListListener(NotifyToTravelListListener l) {
         notifyToTravelListListener = l;
