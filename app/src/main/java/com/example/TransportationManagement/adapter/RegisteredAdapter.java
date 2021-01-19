@@ -6,12 +6,10 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -20,13 +18,10 @@ import androidx.annotation.RequiresApi;
 
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.Entities.UserLocation;
-import com.example.TransportationManagement.Model.RegisteredItem;
 import com.example.TransportationManagement.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 public class RegisteredAdapter extends BaseAdapter {

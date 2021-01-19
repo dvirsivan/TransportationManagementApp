@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.TransportationManagement.Entities.Travel;
@@ -32,23 +33,14 @@ public class MainViewModel extends AndroidViewModel {
 
         repository = TravelRepository.getInstance(p);
         currentUser = mAuth.getCurrentUser();
-        repository.setNotifyToTravelListListener(new ITravelRepository.NotifyToTravelListListener() {
-            @Override
-            public void onTravelsChanged() {
-                List<Travel> travelList = repository.getAllTravels();
-                mutableHistoryTravels.setValue(travelList);
-                updateCompany(travelList);
-                updateRegistered(travelList);
-            }
+        repository.setNotifyToTravelListListener(() -> {
+            List<Travel> travelList = repository.getAllTravels();
+            updateCompany(travelList);
+            updateRegistered(travelList);
         });
-        repository.setNotifyToHistoryTravelListListener(new ITravelRepository.NotifyToHistoryTravelListListener() {
-            @Override
-            public void onHistoryTravelsChanged() {
-                List<Travel> travelHistoryList = repository.getAllHistoryTravels();
-                mutableCompany.setValue(travelHistoryList);
-            }
+        repository.getAllHistoryTravels().observe(this.getApplication(), travels -> {
+            mutableHistoryTravels.setValue(travels);
         });
-
     }
 
 
@@ -73,16 +65,7 @@ public class MainViewModel extends AndroidViewModel {
         }
         mutableRegistered.setValue(registeredTravel);
     }
-    private void updateHistoryTravels(List<Travel> travelList) {
-        ArrayList<Travel> travels = new ArrayList<>();
-        for(Travel travel:travelList) {
-            if(Travel.RequestType.getTypeInt(travel.getStatus()) == 3)
-            {
-                travels.add(travel);
-            }
-        }
-        mutableHistoryTravels.setValue(travels);
-    }
+
     public void updateTravel(Travel toUpdate){
         repository.updateTravel(toUpdate);
     }

@@ -109,7 +109,7 @@ public class Travel {
     }*/
 
     public long  getSumDays(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         try {
             Date firstDate = sdf.parse(startDate);
             Date secondDate = sdf.parse(endDate);

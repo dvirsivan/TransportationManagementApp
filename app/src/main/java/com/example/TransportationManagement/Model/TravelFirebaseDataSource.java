@@ -29,7 +29,7 @@ public  class TravelFirebaseDataSource implements  ITravelDataSource{
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference travels = firebaseDatabase.getReference("AllTravels");
-    DatabaseReference companies = firebaseDatabase.getReference("companies");
+
 
 
     private static TravelFirebaseDataSource instance;

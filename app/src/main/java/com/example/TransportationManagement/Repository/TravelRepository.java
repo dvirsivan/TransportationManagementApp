@@ -3,6 +3,7 @@ package com.example.TransportationManagement.Repository;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.TransportationManagement.Model.IHistoryDataSource;
@@ -13,15 +14,19 @@ import com.example.TransportationManagement.Model.TravelFirebaseDataSource;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
 
 public class TravelRepository implements ITravelRepository {
     ITravelDataSource travelDataSource;
     private IHistoryDataSource historyDataSource;
     private ITravelRepository.NotifyToTravelListListener notifyToTravelListListenerRepository;
     List<Travel> travelList;
-    LinkedList<Travel> historyTravels = new LinkedList<>();
+
+
+
+
     private static TravelRepository instance;
-    private ITravelRepository.NotifyToHistoryTravelListListener notifyToHistoryTravelListListener;
+
     public static TravelRepository getInstance(Application application) {
         if (instance == null)
             instance = new TravelRepository(application);
@@ -31,8 +36,7 @@ public class TravelRepository implements ITravelRepository {
     private TravelRepository(Application application) {
         travelDataSource = TravelFirebaseDataSource.getInstance();
         historyDataSource = new HistoryDataSource(application.getApplicationContext());
-        //sortTravelsForHistory(travelDataSource.getAllTravels());
-         ITravelDataSource.NotifyToTravelListListener notifyToTravelListListener = () -> {
+        ITravelDataSource.NotifyToTravelListListener notifyToTravelListListener = () -> {
             travelList = travelDataSource.getAllTravels();
             checkUpdate();
             if (notifyToTravelListListenerRepository != null)
@@ -42,21 +46,17 @@ public class TravelRepository implements ITravelRepository {
     }
 
     private void checkUpdate() {
-        //historyDataSource.clearTable();
-        for (Travel travel: travelList){
-            if (travel.getStatus() == Travel.RequestType.close){
-                //int indexTravel = historyTravels.indexOf(travel);
-                //if (indexTravel == -1){
-                historyTravels.add(travel);
-                historyDataSource.addTravel(travel);
-
-                //}
-            }
-
-            if(notifyToHistoryTravelListListener != null)
-                notifyToHistoryTravelListListener.onHistoryTravelsChanged();
+        historyDataSource.clearTable();
+        List<Travel> toHistory = new LinkedList<>();
+        for (Travel travel : travelList){
+            if(travel.getStatus() == Travel.RequestType.close)
+                toHistory.add(travel);
+        }
+        if (!toHistory.isEmpty()) {
+            historyDataSource.addTravel(toHistory);
         }
     }
+
 
 
 
@@ -67,10 +67,6 @@ public class TravelRepository implements ITravelRepository {
 
     @Override
     public void updateTravel(Travel travel) {
-       /* if(travel.getStatus()== Travel.RequestType.close) {
-            historyDataSource.deleteTravel(travel);
-            historyTravels.remove(travel);
-        }*/
         travelDataSource.updateTravel(travel);
     }
 
@@ -80,8 +76,8 @@ public class TravelRepository implements ITravelRepository {
     }
 
     @Override
-    public List<Travel> getAllHistoryTravels() {
-        return historyTravels;
+    public LiveData<List<Travel>> getAllHistoryTravels() {
+        return historyDataSource.getTravels();
     }
 
     @Override
@@ -89,22 +85,9 @@ public class TravelRepository implements ITravelRepository {
         return travelDataSource.getIsSuccess();
     }
 
-    @Override
-    public void setNotifyToHistoryTravelListListener(NotifyToHistoryTravelListListener l) {
-        notifyToHistoryTravelListListener = l;
-    }
-
     public void setNotifyToTravelListListener(ITravelRepository.NotifyToTravelListListener l) {
         notifyToTravelListListenerRepository = l;
     }
 
-    public void sortTravelsForHistory(List<Travel> trevels){
-        for (Travel travel: trevels){
-            if (travel.getStatus() == Travel.RequestType.close) {
-                historyDataSource.addTravel(travel);
-                historyTravels.add(travel);
-            }
-        }
-    }
 
 }

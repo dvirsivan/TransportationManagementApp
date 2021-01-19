@@ -11,6 +11,7 @@ import java.util.List;
 public class HistoryDataSource implements IHistoryDataSource{
     private TravelDao travelDao;
 
+
     public HistoryDataSource(Context context){
         RoomDataSource database= RoomDataSource.getInstance(context);
         travelDao = database.getTravelDao();
@@ -40,7 +41,6 @@ public class HistoryDataSource implements IHistoryDataSource{
     public void deleteTravel(Travel p){
         travelDao.delete(p);
     }
-
 
     public void clearTable(){travelDao.clear();}
 
