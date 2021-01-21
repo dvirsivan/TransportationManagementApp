@@ -19,17 +19,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.TransportationManagement.Entities.Travel;
+import com.example.TransportationManagement.Entities.UserLocation;
 import com.example.TransportationManagement.R;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     private List<Travel> travels;
     Context context;
     HistoryTravelListener listener;
+    public final static double AVERAGE_RADIUS_OF_EARTH = 6371;
     public HistoryAdapter(List<Travel> travels , Context context) {
         this.travels = travels;
         this.context = context;
@@ -57,24 +57,50 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 company = comp.getKey();
         }
         if (travel != null) {
-            holder.kilometers.setText(String.valueOf(travel.calcKilometers()));
+            holder.kilometers.setText(String.valueOf(calcTotalDistance(travel)));
             holder.name.setText(company);
             holder.paidUp.setOnClickListener(v -> {
                 if (listener != null)
-                    listener.onButtonClicked(position);
+                    listener.onButtonClicked(position,v);
             });
-            holder.call.setOnClickListener(v -> {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:"));//צריך להבין איך משיגים את הטלפון
-
-                if (ActivityCompat.checkSelfPermission(context,
-                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(context, "please approve phone call", Toast.LENGTH_LONG).show();
-                } else
-                    context.startActivity(callIntent);
+            holder.sendMail.setOnClickListener(v -> {
+                if (listener != null)
+                    listener.onButtonClicked(position,v);
 
             });
         }
+    }
+
+    private float calcTotalDistance(Travel travel){
+        List<UserLocation> destinations = travel.getDestinations();
+        UserLocation firstPoint = travel.getSource();
+        UserLocation secondPoint = destinations.get(0);
+        float totalDistance = calculateDistance(firstPoint.getLat(),firstPoint.getLon(),secondPoint.getLat(),secondPoint.getLon());
+        for(int i = 1; i < destinations.size(); i++){
+            firstPoint = destinations.get(i-1);
+            secondPoint = destinations.get(i);
+            totalDistance += calculateDistance(firstPoint.getLat(),firstPoint.getLon(),secondPoint.getLat(),secondPoint.getLon());
+        }
+        totalDistance += calculateDistance(destinations.get(destinations.size()-1).getLat(),destinations.get(destinations.size()-1).getLon(),
+                travel.getSource().getLat(),travel.getSource().getLon());
+        return totalDistance;
+    }
+
+    public static float calculateDistance(double userLat, double userLng, double venueLat, double venueLng) {
+
+        double latDistance = Math.toRadians(userLat - venueLat);
+        double lngDistance = Math.toRadians(userLng - venueLng);
+
+        double a = (Math.sin(latDistance / 2) * Math.sin(latDistance / 2)) +
+                (Math.cos(Math.toRadians(userLat))) *
+                        (Math.cos(Math.toRadians(venueLat))) *
+                        (Math.sin(lngDistance / 2)) *
+                        (Math.sin(lngDistance / 2));
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return (float) (Math.round(AVERAGE_RADIUS_OF_EARTH * c));
+
     }
 
     @Override
@@ -85,20 +111,20 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView name;
         TextView kilometers;
-        Button call;
+        Button sendMail;
         Button paidUp;
         LinearLayout linearLayout;
         public ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.companyName);
             kilometers = (TextView) itemView.findViewById(R.id.kilometers);
-            call = (Button) itemView.findViewById(R.id.callButtonHistory);
+            sendMail = (Button) itemView.findViewById(R.id.mailButtonHistory);
             paidUp = (Button) itemView.findViewById(R.id.changeStatusButton);
             linearLayout = (LinearLayout)itemView.findViewById(R.id.historyItemLayout);
         }
     }
     public interface HistoryTravelListener {
-        void onButtonClicked(int position);
+        void onButtonClicked(int position,View view);
     }
     public void setListener(HistoryAdapter.HistoryTravelListener listener){
         this.listener = listener;

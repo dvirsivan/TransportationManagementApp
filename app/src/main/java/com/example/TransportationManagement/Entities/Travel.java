@@ -145,18 +145,7 @@ public class Travel {
             return result;
         }
     }
-    public float calcKilometers(){
-        float[] res = new float[3];
-        distanceBetween(source.getLat(),source.getLon(),destinations.get(0).getLat(),destinations.get(0).getLon(),res);
-        float ans = res[0];
-        for (int i = 0; i < destinations.size() -1; i++){
-            UserLocation first = destinations.get(i);
-            UserLocation second = destinations.get(i+1);
-            distanceBetween(first.getLat(),first.getLon(),second.getLat(),second.getLon(),res);
-            ans += res[0];
-        }
-        return ans/1000;
-    }
+
 
     //@TypeConverters(RequestType.class)
     //private RequestType requestType;

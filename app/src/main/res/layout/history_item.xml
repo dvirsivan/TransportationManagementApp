@@ -18,8 +18,8 @@
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:id="@+id/callButtonHistory"
-            android:text="send mail"/>
+            android:id="@+id/mailButtonHistory"
+            android:text="mail"/>
 
         <Button
             android:layout_width="match_parent"
