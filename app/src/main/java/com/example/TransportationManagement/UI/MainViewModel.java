@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.Repository.ITravelRepository;
@@ -33,14 +34,14 @@ public class MainViewModel extends AndroidViewModel {
 
         repository = TravelRepository.getInstance(p);
         currentUser = mAuth.getCurrentUser();
+
         repository.setNotifyToTravelListListener(() -> {
             List<Travel> travelList = repository.getAllTravels();
             updateCompany(travelList);
             updateRegistered(travelList);
         });
-        repository.getAllHistoryTravels().observe(this.getApplication(), travels -> {
-            mutableHistoryTravels.setValue(travels);
-        });
+
+
     }
 
 
@@ -70,8 +71,8 @@ public class MainViewModel extends AndroidViewModel {
         repository.updateTravel(toUpdate);
     }
 
-    public MutableLiveData<List<Travel>> getMutableHistoryTravels() {
-        return mutableHistoryTravels;
+    public LiveData<List<Travel>> getMutableHistoryTravels() {
+        return repository.getAllHistoryTravels();
     }
 
     public MutableLiveData<List<Travel>> getMutableCompany() {

@@ -106,7 +106,7 @@ public class CompanyTravelsFragment extends Fragment {
             mainViewModel.getIsSuccess().observe(getActivity(), new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean aBoolean) {
-                    Toast.makeText(getContext(), "operation Succeeded", Toast.LENGTH_LONG).show();
+                    Toast.makeText(view.getContext(), "operation Succeeded", Toast.LENGTH_LONG).show();
                 }
             });
         }

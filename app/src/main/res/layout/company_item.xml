@@ -33,6 +33,7 @@
             android:gravity="left"
             android:enabled="false"
             android:textColor="@color/black"
+            android:background="@null"
             />
     </TableRow>
 </TableLayout>
@@ -50,12 +51,14 @@
                 android:text="accepted"
                 />
             <EditText
+                android:layout_width="150dp"
                 android:id="@+id/sourceInCompany"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:enabled="false"
                 android:textColor="@color/black"
-                android:text="Source" />
+                android:text="Source"
+                android:background="@null"/>
             <Spinner
 
                 android:id="@+id/destinationsInCompany"
@@ -80,6 +83,7 @@
             android:maxWidth="100dp"
             android:enabled="false"
             android:textColor="@color/black"
+            android:background="@null"
             />
         <EditText
             android:id="@+id/start_date"
@@ -89,6 +93,8 @@
             android:layout_weight="1"
             android:enabled="false"
             android:textColor="@color/black"
+            android:layoutDirection="ltr"
+            android:background="@null"
             />
         <EditText
             android:id="@+id/client_name"
@@ -98,6 +104,7 @@
             android:maxWidth="100dp"
             android:enabled="false"
             android:textColor="@color/black"
+            android:background="@null"
             />
     </TableRow>
 </TableLayout>

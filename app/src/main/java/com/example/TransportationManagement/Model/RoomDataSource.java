@@ -23,5 +23,6 @@ public abstract class RoomDataSource extends RoomDatabase {
         return database;
     }
 
+
     public abstract TravelDao getTravelDao();
 }

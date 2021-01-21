@@ -55,7 +55,7 @@ public class UserLocation {
             e.printStackTrace();
         }
         if (addresses!=null && addresses.size()>0)
-            return addresses.get(0).getLocality()+" - "+addresses.get(0).getCountryName();
+            return addresses.get(0).getAddressLine(0);
         return this.toString();
     }
     public static List<String> convertToString(Context context, List<UserLocation> userLocationList){

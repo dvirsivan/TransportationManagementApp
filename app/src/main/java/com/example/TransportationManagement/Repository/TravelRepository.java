@@ -21,6 +21,7 @@ public class TravelRepository implements ITravelRepository {
     private IHistoryDataSource historyDataSource;
     private ITravelRepository.NotifyToTravelListListener notifyToTravelListListenerRepository;
     List<Travel> travelList;
+    LiveData<List<Travel>> historyTravels;
 
 
 
