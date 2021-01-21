@@ -87,7 +87,7 @@ public class CompanyTravelsFragment extends Fragment {
 
 
     private void action(Travel travel, View view){
-        if(view.getId()==R.id.callButton){
+        if(view.getId() == R.id.callButton){
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
             String phone = travel.getClientPhone();
             callIntent.setData(Uri.parse("tel:" + phone));
@@ -100,15 +100,16 @@ public class CompanyTravelsFragment extends Fragment {
             else
                 getContext().startActivity(callIntent);
         }
-        if(view.getId()==R.id.accept_button){
+        if(view.getId() == R.id.accept_button){
             travel.setCompany(keyFromMail(currentUser.getEmail()),false);
-            mainViewModel.updateTravel(travel);
             mainViewModel.getIsSuccess().observe(getActivity(), new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean aBoolean) {
                     Toast.makeText(view.getContext(), "operation Succeeded", Toast.LENGTH_LONG).show();
                 }
             });
+            mainViewModel.updateTravel(travel);
+
         }
 
     }
