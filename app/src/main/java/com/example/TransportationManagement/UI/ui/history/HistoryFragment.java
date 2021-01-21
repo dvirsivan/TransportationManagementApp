@@ -31,6 +31,7 @@ public class HistoryFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_history, container, false);
         final RecyclerView recyclerView = root.findViewById(R.id.historyRecyclerView);
         HistoryAdapter historyAdapter = new HistoryAdapter(travels,getContext());
+
         mainViewModel.getMutableHistoryTravels().observe(this.getActivity(), travelList -> {
             travels = travelList;
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

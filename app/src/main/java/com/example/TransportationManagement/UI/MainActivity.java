@@ -1,6 +1,7 @@
 package com.example.TransportationManagement.UI;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.TransportationManagement.Model.MyBroadcastReceiver;
 import com.example.TransportationManagement.Model.MyService;
 import com.example.TransportationManagement.R;
 import com.google.android.material.navigation.NavigationView;
@@ -28,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        registerReceiver(
+                 	new MyBroadcastReceiver(),
+                  	new IntentFilter("NEW_TRAVEL"));
         ListView registeredList = (ListView)findViewById(R.id.registeredList);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

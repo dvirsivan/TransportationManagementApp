@@ -48,6 +48,7 @@ public class RegisteredAdapter extends BaseAdapter {
         return position;
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

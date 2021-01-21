@@ -13,7 +13,7 @@ public class HistoryDataSource implements IHistoryDataSource{
 
 
     public HistoryDataSource(Context context){
-        RoomDataSource database= RoomDataSource.getInstance(context);
+        RoomDataSource database = RoomDataSource.getInstance(context);
         travelDao = database.getTravelDao();
         travelDao.clear();
     }

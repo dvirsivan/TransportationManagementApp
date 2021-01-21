@@ -23,8 +23,6 @@ import static android.content.ContentValues.TAG;
 public class MyService extends Service{
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference travels = firebaseDatabase.getReference("AllTravels");
-    TravelFirebaseDataSource firebaseDataSource = TravelFirebaseDataSource.getInstance();
-    List<Travel> allTravels;
     Thread thread;
     long count;
     @Nullable
@@ -37,12 +35,11 @@ public class MyService extends Service{
     public void onCreate() {
         super.onCreate();
         count = 0;
-        allTravels = firebaseDataSource.getAllTravels();
         thread = new Thread(){
             @Override
             public void run() {
-                Intent intent = new Intent();
-                intent.setAction("Name of App.NEW_TRAVEL");
+                Intent intent = new Intent("Add_travel");
+                intent.setAction("com.javacodegeeks.android.NEW_TRAVEL");
                 sendBroadcast(intent);
             }
         };
@@ -50,13 +47,11 @@ public class MyService extends Service{
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Log.d(TAG,"out of func!");
+                if (count == 0){
+                    count = snapshot.getChildrenCount();
+                }
                 if (count < snapshot.getChildrenCount()){
-                    allTravels.clear();
-                    for (DataSnapshot snap : snapshot.getChildren()){
-                        Travel travel = snap.getValue(Travel.class);
-                        allTravels.add(travel);
-                    }
-                    count = allTravels.size();
+                    count = snapshot.getChildrenCount();
                     thread.run();
                     Log.d(TAG,"in func!");
                 }
@@ -77,8 +72,5 @@ public class MyService extends Service{
     public void onDestroy() {
         super.onDestroy();
     }
-    public class Notification extends Thread{
-        private void sendIntent(){
-        }
-    }
+
 }

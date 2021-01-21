@@ -31,7 +31,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     Context context;
     HistoryTravelListener listener;
     public HistoryAdapter(List<Travel> travels , Context context) {
-
         this.travels = travels;
         this.context = context;
     }
@@ -47,7 +46,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if(position%2==0)
+        if(position % 2 == 0)
             holder.linearLayout.setBackgroundColor(Color.LTGRAY);
         else
             holder.linearLayout.setBackgroundColor(Color.WHITE);
@@ -80,7 +79,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return travels.size();
+        return travels == null? 0: travels.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

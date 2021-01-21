@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 
 import com.example.TransportationManagement.Entities.Travel;
 import com.example.TransportationManagement.Repository.ITravelRepository;
@@ -21,12 +20,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class MainViewModel extends AndroidViewModel {
     ITravelRepository repository;
-    MutableLiveData<List<Travel>> mutableHistoryTravels = new MutableLiveData<>();
     MutableLiveData<List<Travel>> mutableCompany = new MutableLiveData<>();
     MutableLiveData<List<Travel>> mutableRegistered = new MutableLiveData<>();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser;
     private SharedPreferences sharedPreferences;
+    String userEmail;
 
 
     public MainViewModel(Application p){//צריך לבדוק אם הרשימות נטענות
@@ -34,7 +33,8 @@ public class MainViewModel extends AndroidViewModel {
 
         repository = TravelRepository.getInstance(p);
         currentUser = mAuth.getCurrentUser();
-
+        sharedPreferences = getApplication().getSharedPreferences("USER",MODE_PRIVATE);
+        userEmail = sharedPreferences.getString("email","");
         repository.setNotifyToTravelListListener(() -> {
             List<Travel> travelList = repository.getAllTravels();
             updateCompany(travelList);
@@ -59,7 +59,7 @@ public class MainViewModel extends AndroidViewModel {
     private void updateRegistered(List<Travel> travelList){
         ArrayList<Travel> registeredTravel = new ArrayList<>();
         for(Travel travel:travelList){
-            if(Travel.RequestType.getTypeInt(travel.getStatus()) < 3 )//&& travel.getClientEmail().equals(currentUser.getEmail())
+            if(Travel.RequestType.getTypeInt(travel.getStatus()) < 3 && travel.getClientEmail().equals(userEmail) )//&& travel.getClientEmail().equals(currentUser.getEmail())
             {
                 registeredTravel.add(travel);
             }
