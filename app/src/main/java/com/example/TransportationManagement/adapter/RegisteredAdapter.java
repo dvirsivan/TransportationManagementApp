@@ -68,10 +68,10 @@ public class RegisteredAdapter extends BaseAdapter {
         Travel currentItem = (Travel) getItem(position);
         viewHolder.source.setText(currentItem.getSource().convertToString(context));
         viewHolder.date.setText(currentItem.getStartDate());
-        spinerAdapter(viewHolder.destinations, UserLocation.convertToString(context,currentItem.getDestinations()));
-        spinerAdapter(viewHolder.company,new ArrayList(currentItem.getCompany().keySet()));
-        spinerAdapter(viewHolder.statuses,Renum);
-
+        spinnerAdapter(viewHolder.destinations, UserLocation.convertToString(context,currentItem.getDestinations()));
+        spinnerAdapter(viewHolder.company,new ArrayList(currentItem.getCompany().keySet()));
+        spinnerAdapter(viewHolder.statuses,Renum);
+        viewHolder.submit.setEnabled(!currentItem.getCompany().isEmpty());
         viewHolder.submit.setOnClickListener(v -> {
             if(viewHolder.company.getSelectedItem()!=null){
                 String comp = viewHolder.company.getSelectedItem().toString();
@@ -83,7 +83,7 @@ public class RegisteredAdapter extends BaseAdapter {
 
         return convertView;
     }
-    private void spinerAdapter(Spinner spin,List list){
+    private void spinnerAdapter(Spinner spin, List list){
         ArrayAdapter aa = new ArrayAdapter(this.context,android.R.layout.simple_spinner_item,list);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(aa);
