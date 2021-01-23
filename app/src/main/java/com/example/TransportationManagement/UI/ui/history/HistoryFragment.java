@@ -1,5 +1,7 @@
 package com.example.TransportationManagement.UI.ui.history;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.example.TransportationManagement.adapter.HistoryAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class HistoryFragment extends Fragment {
 
@@ -39,18 +42,40 @@ public class HistoryFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             HistoryAdapter adapter = new HistoryAdapter(travels, getContext());
-            adapter.setListener(position -> action(position));
+            adapter.setListener((position, view) -> action(position,view));
             recyclerView.setAdapter(adapter);
         });
-        historyAdapter.setListener(position -> action(position));
+        historyAdapter.setListener((position,view) -> action(position,view));
 
 
         return root;
     }
 
-    private void action(int position) {
-        Travel travel = travels.get(position);
-        travel.setStatus(Travel.RequestType.paidUp);
-        mainViewModel.updateTravel(travel);
+    private void action(int position,View view) {
+        if(view.getId() == R.id.changeStatusButton) {
+            Travel travel = travels.get(position);
+            travel.setStatus(Travel.RequestType.paidUp);
+            mainViewModel.updateTravel(travel);
+        }
+
+        if(view.getId() == R.id.mailButtonHistory){
+            String mail="";
+            for(Map.Entry<String,Boolean> company:travels.get(position).getCompany().entrySet()){
+                if(company.getValue()){
+                    mail = company.getKey() + "@gmail.com";
+                }
+
+            }
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            if(!mail.equals("")) {
+                intent.setData(Uri.parse("mailto:" + mail));
+                try {
+                    startActivity(Intent.createChooser(intent, "Send mail..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(getContext(), "There is no email client installed.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
     }
 }

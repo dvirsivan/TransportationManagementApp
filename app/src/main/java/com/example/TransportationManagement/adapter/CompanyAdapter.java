@@ -96,6 +96,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
         return distanceFilter;
     }
     public void resetData(){companyItems = originalCompanyItems;}
+
     private  class DistanceFilter extends Filter{
         Location location;
         public final static double AVERAGE_RADIUS_OF_EARTH = 6371;
