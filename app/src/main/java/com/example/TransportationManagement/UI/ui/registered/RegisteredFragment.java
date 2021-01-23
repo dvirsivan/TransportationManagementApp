@@ -25,7 +25,13 @@ public class RegisteredFragment extends Fragment {
     MainViewModel mainViewModel;
 
 
-
+    /**
+     * onCreate function
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mainViewModel =
@@ -33,30 +39,18 @@ public class RegisteredFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_registered, container, false);
         ListView listView = ((ListView) root.findViewById(R.id.registeredList));
 
-        RegisteredAdapter registeredAdapter = new RegisteredAdapter(getContext(), travels);
-
-
-        mainViewModel.getMutableRegistered().observe(this.getActivity(), new Observer<List<Travel>>() {
-            @Override
-            public void onChanged(List<Travel> travelList) {
-                travels = new ArrayList<>(travelList);
-                RegisteredAdapter registeredAdapter = new RegisteredAdapter(getContext(), travels);
-                registeredAdapter.setListener((position, status, company) -> {
-                    Travel travel = travels.get(position);
-                    travel.setStatus(Travel.RequestType.getType(status));
-                    travel.setCompany(company,true);
-                    mainViewModel.updateTravel(travel);
-                });
-                listView.setAdapter(registeredAdapter);
-            }
+        mainViewModel.getMutableRegistered().observe(this.getActivity(), travelList -> { // listener if travel changed
+            travels = new ArrayList<>(travelList);
+            RegisteredAdapter registeredAdapter = new RegisteredAdapter(getContext(), travels);
+            registeredAdapter.setListener((position, status, company) -> { // listener if need to change the status
+                Travel travel = travels.get(position);
+                travel.setStatus(Travel.RequestType.getType(status));
+                travel.setCompany(company,true);
+                mainViewModel.updateTravel(travel);
+            });
+            listView.setAdapter(registeredAdapter);
         });
-        /*registeredAdapter.setListener((position, status, company) -> {
-            Travel travel = travels.get(position);
-            travel.setStatus(Travel.RequestType.getType(status));
-            travel.setCompany(company, true);
-            mainViewModel.updateTravel(travel);
 
-        });*/
         return root;
     }
 }

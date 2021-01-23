@@ -28,6 +28,12 @@ public class RegisteredAdapter extends BaseAdapter {
     private Context context;
     private List<Travel> items;
     RegisteredTravelListener listener;
+
+    /**
+     * constructor
+     * @param context
+     * @param items
+     */
     public RegisteredAdapter(Context context, List<Travel> items) {
         this.context = context;
         this.items = items;
@@ -50,30 +56,37 @@ public class RegisteredAdapter extends BaseAdapter {
         return position;
     }
 
-
+    /**
+     * get item for all item in listView
+     * @param position - index's item in list
+     * @param convertView the view
+     * @param parent the list
+     * @return
+     */
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        if (convertView == null) {
+        if (convertView == null) {  // if it first time of this convertView
             convertView = LayoutInflater.from(context).inflate(R.layout.regisreted_item, parent, false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        if(position%2==0)
+        if(position % 2 == 0)
             viewHolder.linearLayout.setBackgroundColor(Color.LTGRAY);
         else
             viewHolder.linearLayout.setBackgroundColor(Color.WHITE);
-        List<String> Renum = Arrays.asList("Sent", "Accepted", "Run", "close");
+        List<String> Renum = Arrays.asList("Sent", "Accepted", "Run", "close"); // list of the enums
+        // set all values in item
         Travel currentItem = (Travel) getItem(position);
         viewHolder.source.setText(currentItem.getSource().convertToString(context));
         viewHolder.date.setText(currentItem.getStartDate());
         spinnerAdapter(viewHolder.destinations, UserLocation.convertToString(context,currentItem.getDestinations()));
         spinnerAdapter(viewHolder.company,new ArrayList(currentItem.getCompany().keySet()));
         spinnerAdapter(viewHolder.statuses,Renum);
-        viewHolder.submit.setEnabled(!currentItem.getCompany().isEmpty());
+        viewHolder.submit.setEnabled(!currentItem.getCompany().isEmpty()); // if no company
         viewHolder.submit.setOnClickListener(v -> {
             if(viewHolder.company.getSelectedItem()!=null){
                 String comp = viewHolder.company.getSelectedItem().toString();
@@ -85,6 +98,12 @@ public class RegisteredAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    /**
+     * help function for insert list to spinner
+     * @param spin insert for him
+     * @param list for insert
+     */
     private void spinnerAdapter(Spinner spin, List list){
         ArrayAdapter aa = new ArrayAdapter(this.context,android.R.layout.simple_spinner_item,list);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
