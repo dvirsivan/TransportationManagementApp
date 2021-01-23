@@ -25,6 +25,10 @@ public class loginActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private SharedPreferences sharedPreferences;
 
+    /**
+     * onCreate function. if exist sharedPreferences - write it. else - create it
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,23 +37,23 @@ public class loginActivity extends AppCompatActivity {
         ((EditText)findViewById(R.id.email)).setText(sharedPreferences.getString("email",""));
         ((EditText)findViewById(R.id.password)).setText(sharedPreferences.getString("password",""));
 
-
     }
 
+    /**
+     * listener for onLogin Button. check if the user is already registered
+     * @param view - the Button clicked
+     */
     public void onLoginClick(View view) {
         email = ((EditText)findViewById(R.id.email)).getText().toString().trim();
         password = ((EditText)findViewById(R.id.password)).getText().toString().trim();
-        //   currentUser = mAuth.getCurrentUser();
+
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, task -> {
             if (task.isSuccessful() ){
-                //if (currentUser.isEmailVerified()) {
-                if(sharedPreferences.getString("email","")=="")
+                if(sharedPreferences.getString("email","") == "") // if it not written - write it
                     shared();
                 Intent intent = new Intent(loginActivity.this, MainActivity.class);
                 startActivity(intent);
-                //}
-                //else
-                //Toast.makeText(getBaseContext(),"Please verify the mail",Toast.LENGTH_LONG).show();
+
             }
             else
                 Toast.makeText(getBaseContext(),task.getException().getMessage(),Toast.LENGTH_LONG).show();
@@ -58,6 +62,11 @@ public class loginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * register the user and send verification
+     * @param view the view clicked
+     * @throws InterruptedException
+     */
     public void onSignUpClick(View view) throws InterruptedException {
         email = ((EditText)findViewById(R.id.email)).getText().toString().trim();
         password = ((EditText)findViewById(R.id.password)).getText().toString().trim();
@@ -66,7 +75,7 @@ public class loginActivity extends AppCompatActivity {
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
                             currentUser = mAuth.getCurrentUser();
-                            sendMail();
+                            sendMail(); // for verification
                             shared();
                         } else {
                             Toast.makeText(getBaseContext(), task.getException().getMessage(),
@@ -78,6 +87,9 @@ public class loginActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(), validFields(), Toast.LENGTH_LONG);
     }
 
+    /**
+     * write the email and password in sharedPreferences
+     */
     private void shared() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("email", email);
@@ -85,6 +97,10 @@ public class loginActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    /**
+     * validation about inputs
+     * @return message - the fields that wrong. if it empty - the input proper
+     */
     private String validFields() {
         String message = "";
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
@@ -97,6 +113,9 @@ public class loginActivity extends AppCompatActivity {
         return message;
     }
 
+    /**
+     * send mail for verification
+     */
     private void sendMail() {
         currentUser.sendEmailVerification().addOnCompleteListener(this, task -> {
             if(task.isSuccessful()){
