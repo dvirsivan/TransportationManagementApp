@@ -49,6 +49,12 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
         return companyHolder;
     }
 
+    /**
+     * puts in each row the needed data for the company fragment such as the start date the clint name and more
+     *
+     * @param holder hold the views in of each row in the company fragment
+     * @param position the position of the data in the list of the company items
+     */
     @Override
     public void onBindViewHolder(@NonNull CompanyHolder holder, int position) {
         if(position%2==0)
@@ -62,22 +68,35 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
         holder.numPass.setText("travelers:" + companyItem.getAmountTravelers());
         holder.source.setText("address:\n"+companyItem.getSource().convertToString(context));
         spinnerAdapter(holder.dest,UserLocation.convertToString(context,companyItem.getDestinations()));
+        //listener for the accept button
         holder.accept.setOnClickListener(  view->
         {
             if(listener!=null)
                 listener.onButtonClicked(companyItem,view);
         });
+        //listener for the call button
         holder.call.setOnClickListener(view ->{
             if(listener!=null)
                 listener.onButtonClicked(companyItem,view);
         });
         holder.acceptedBox.setChecked(Travel.RequestType.getTypeInt(companyItem.getStatus()) > 0);
     }
+
+    /**
+     * sets the spinner with data
+     * @param spin the spinner that we put the data in it
+     * @param list the data that go into the filter
+     */
     private void spinnerAdapter(Spinner spin, List list){
         ArrayAdapter aa = new ArrayAdapter(this.context,android.R.layout.simple_spinner_item,list);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(aa);
     }
+
+    /**
+     * sets the location of the distanceFilter class
+     * @param location the location for the filter
+     */
     public void setLocation(Location location){
         if(distanceFilter!=null){
             distanceFilter.setLocation(location);
@@ -95,11 +114,24 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
             distanceFilter = new DistanceFilter();
         return distanceFilter;
     }
+
+    /**
+     * resets the data to the original data before the filter
+     */
     public void resetData(){companyItems = originalCompanyItems;}
 
+    /**
+     * inner class that perform filtering base on the distance between the location and the source location of the Travel
+     */
     private  class DistanceFilter extends Filter{
         Location location;
         public final static double AVERAGE_RADIUS_OF_EARTH = 6371;
+
+        /**
+         *
+         * @param constraint the max distance that from the location to the source of the client that we filter by
+         * @return all the travels that are closer then the max distance
+         */
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
@@ -137,6 +169,14 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
             this.location = location;
         }
 
+        /**
+         * calculate the distance between to points
+         * @param userLat first point lat
+         * @param userLng first point lng
+         * @param venueLat second point lat
+         * @param venueLng second point lng
+         * @return the distance between the to points
+         */
         public float calculateDistance(double userLat, double userLng, double venueLat, double venueLng) {
 
             double latDistance = Math.toRadians(userLat - venueLat);
@@ -155,6 +195,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
         }
     }
 
+    /**
+     * holds the view of each row so we don't need to seek fir them in the R file
+     */
     public static class CompanyHolder extends RecyclerView.ViewHolder {
         LinearLayout linearLayout;
         TextView source;
@@ -183,9 +226,17 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
         }
     }
 
+    /**
+     * inner interface fot the buttons
+     */
     public interface CompanyTravelListener {
         void onButtonClicked(Travel travel, View view);
     }
+
+    /**
+     * set the listener to do an action when called
+     * @param listener the function that is called in the company fragment when a button is clicked
+     */
     public void setListener(CompanyTravelListener listener){
         this.listener=listener;
     }

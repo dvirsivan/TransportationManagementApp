@@ -33,6 +33,8 @@ public class RegisteredAdapter extends BaseAdapter {
         this.items = items;
     }
 
+
+
     @Override
     public int getCount() {
         return items.size();
@@ -113,5 +115,7 @@ public class RegisteredAdapter extends BaseAdapter {
     public void setListener(RegisteredAdapter.RegisteredTravelListener listener){
         this.listener = listener;
     }
+
+
 
 }

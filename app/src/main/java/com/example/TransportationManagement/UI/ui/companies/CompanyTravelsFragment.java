@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -74,6 +75,8 @@ public class CompanyTravelsFragment extends Fragment {
             public void onProviderDisabled(String provider) { }
         };
         getLocation();
+        //get the travels for the display at the beginning of the fragment and when there is a change in the data source
+        //and sets the adapter
         mainViewModel.getMutableCompany().observe(this.getActivity(), travelList -> {
             travels = travelList;
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -86,6 +89,12 @@ public class CompanyTravelsFragment extends Fragment {
     }
 
 
+    /**
+     * if the call button was clicked stats an intent of CALL_PHONE
+     * if the accept button was clicked updates the status of the travel to the new status
+     * @param travel that travel that a button was clicked in his row
+     * @param view the button that clicked
+     */
     private void action(Travel travel, View view){
         if(view.getId() == R.id.callButton){
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
@@ -108,6 +117,7 @@ public class CompanyTravelsFragment extends Fragment {
                     Toast.makeText(view.getContext(), "operation Succeeded", Toast.LENGTH_LONG).show();
                 }
             });
+            //updates the travel with the new status
             mainViewModel.updateTravel(travel);
 
         }
@@ -128,11 +138,18 @@ public class CompanyTravelsFragment extends Fragment {
 
     }
 
+    /**
+     * sets the filter by the new max distance
+     * @param filterButton
+     * @param filterSpinner the distance for the filter
+     */
     private void setFilter(Button filterButton, Spinner filterSpinner){
 
         filterButton.setOnClickListener(v -> {
+            // if we have the current location of the user
             if(currentLocation != null){
                 String maxDistance = filterSpinner.getSelectedItem().toString();
+                //if we want to cancel the filter or get more distance results
                 if(maxDistance.equals("without") || Integer.parseInt(maxDistance)>currentMaxDistance)
                     companyAdapter.resetData();
                 if(!maxDistance.equals("without"))
@@ -153,4 +170,5 @@ public class CompanyTravelsFragment extends Fragment {
         }
         return res;
     }
+
 }

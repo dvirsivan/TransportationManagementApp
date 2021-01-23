@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(
                  	new MyBroadcastReceiver(),
                   	new IntentFilter("NEW_TRAVEL"));
-        ListView registeredList = (ListView)findViewById(R.id.registeredList);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -52,17 +51,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        ListView registeredList = (ListView)findViewById(R.id.registeredList);
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        EditText email = ((EditText)findViewById(R.id.email));
         return true;
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        EditText email = ((EditText)findViewById(R.id.email));
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
 
